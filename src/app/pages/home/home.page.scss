@@ -1,0 +1,38 @@
+.products {
+    content: url('../../../assets/imgs/shopping.png');
+  }
+
+  .reports {
+    content: url('../../../assets/imgs/report.png');
+  }
+
+  .customers {
+    content: url('../../../assets/imgs/teamwork3.png');
+  }
+  
+  .proposal {
+    content: url('../../../assets/imgs/goods.png');
+  }
+
+  .col-style{
+    min-height: 176px;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .img-style{
+    max-width: 60px;
+  }
+
+  .b-right{
+      border-right: 1px solid #dcdbdb;
+  }
+  .b-left{
+      border-left: 1px solid #dcdbdb;
+  }
+  .b-top{
+      border-top: 1px solid #dcdbdb;
+  }
+  .b-bottom{
+      border-bottom: 1px solid #dcdbdb;
+  }

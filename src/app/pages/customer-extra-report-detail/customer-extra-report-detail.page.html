@@ -1,0 +1,353 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'ORDER-DETAIL_TITLE_TEXT' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button defaulthref=""> 
+        <ion-back-button></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div *ngIf="!type">  
+    <ion-grid *ngFor="let product of extredetail"> 
+      <ion-row>   
+        <ion-col>
+        <ion-item-divider color="light">
+          <ion-icon name="information-circle" slot="start"></ion-icon>
+          <strong>{{'INVOICE_INFORMATION' | translate}}</strong>
+        </ion-item-divider>
+      </ion-col>
+      </ion-row> 
+      <ion-row>
+        <ion-col class="allreports-table-col"><ion-item><ion-label>{{'DATE_TEXT' | translate}}</ion-label></ion-item> </ion-col>
+        <ion-col><ion-item> <ion-input type="text" [disabled]="true"></ion-input> </ion-item> </ion-col> 
+      </ion-row>
+      <ion-row>
+        <ion-col class="allreports-table-col"> <ion-item> <ion-label>{{'OPERATION_TEXT' | translate}}</ion-label></ion-item></ion-col>
+        <ion-col class="allreports-table-col"> <ion-item> <ion-input type="text" [disabled]="true"[(ngModel)]="product.ProcessDescription"> </ion-input> </ion-item> </ion-col>
+      </ion-row>
+      <ion-row  > 
+        <ion-col class="allreports-table-col"> <ion-item> <ion-label>{{'DOCUMENT_NO' | translate}}.</ion-label> </ion-item></ion-col>
+        <ion-col class="allreports-table-col"> <ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="product.RefNumber"></ion-input> </ion-item> </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col class="allreports-table-col"> 
+            <ion-item> <ion-label>{{'SETTINGS_SETTINGS_V3_STORE_CODE_LABEL_TEXT' | translate}}</ion-label> </ion-item>  
+          </ion-col>
+          <ion-col class="allreports-table-col">   <ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="product.StoreCode"></ion-input> </ion-item> </ion-col>
+      </ion-row>
+      <ion-row>
+            <ion-col class="allreports-table-col"> 
+               <ion-item> <ion-label>{{'SALES_RESPONSIBLE' | translate}}</ion-label> </ion-item> 
+            </ion-col>
+            <ion-col class="allreports-table-col"> 
+              <ion-item>  <ion-input type="text" [disabled]="true" [(ngModel)]="product.SalespersonFirstLastName"></ion-input> </ion-item>
+            </ion-col>
+       </ion-row>  
+       
+    
+       <ion-row>
+         <ion-col>
+          <ion-item-divider color="light">
+            <ion-icon name="information-circle" slot="start"></ion-icon>
+            <strong>{{'PRODUCT_INFORMATION' | translate}}</strong> 
+          </ion-item-divider>
+      </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> <ion-label>{{'PRODUCT_NAME' | translate}}</ion-label> </ion-item>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> 
+              <ion-input type="text" [disabled]="true" [(ngModel)]="product.ProductDescription"> </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row> 
+      <ion-row>
+          <ion-col class="allreports-table-col" size="6">
+            <ion-item> <ion-label>{{'SELECT-PRODUCT_PRODUCT_CODE_TEXT' | translate}}</ion-label> </ion-item>
+          </ion-col>
+          <ion-col class="allreports-table-col" size="6">
+            <ion-item> 
+                <ion-input type="text" [disabled]="true" [(ngModel)]="product.SKU"> </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row> 
+
+      <ion-row>
+        <ion-col>
+            <ion-item-divider color="light">
+                <ion-icon name="information-circle" slot="start"></ion-icon>
+                <strong>{{'PAYMENT_INFORMATION' | translate}}</strong>
+              </ion-item-divider>
+        </ion-col>
+      </ion-row> 
+      <ion-row>
+        <ion-col>
+          <ion-item> <ion-label>{{'ORDER-DETAIL_PRICE_TEXT' | translate}}</ion-label></ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item  > 
+              <ion-input type="text" [disabled]="true" [(ngModel)]="product.Price"> </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row> 
+      <ion-row>
+          <ion-col>
+            <ion-item> <ion-label>{{'AMOUNT' | translate}}</ion-label></ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item  > 
+                <ion-input type="text" [disabled]="true" [(ngModel)]="product.Qty1"> </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>  
+        <ion-row>
+            <ion-col>
+              <ion-item>  <ion-label>{{'AMOUNT_TEXT' | translate}}</ion-label></ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item  > 
+                  <ion-input type="text" [disabled]="true"[(ngModel)]="product.Amount"> </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>  
+          <ion-row>
+              <ion-col>
+                <ion-item>  <ion-label>{{'ORDER-DETAIL_DISCOUNT_RATE_TEXT' | translate}}</ion-label></ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item  > 
+                    <ion-input type="text" [disabled]="true" [(ngModel)]="product.Discount"> </ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>   
+            <ion-row>
+                <ion-col>
+                  <ion-item>  <ion-label>{{'NET_AMOUNT' | translate}}</ion-label></ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item  > 
+                      <ion-input type="text" [disabled]="true" [(ngModel)]="product.NetAmount"> </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row> 
+              <ion-row>
+                  <ion-col>
+                    <ion-item>  <ion-label>{{'PAYMENT_PLAN_TEXT' | translate}}</ion-label></ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item  > 
+                        <ion-input type="text" [disabled]="true" [(ngModel)]="product.PaymentPlanCode"> </ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>  
+      </ion-grid> 
+      <ion-grid *ngFor="let pinfo of paymentInfo">
+        <ion-row>
+          <ion-col>
+            <ion-item-divider color="light">
+              <ion-icon name="information-circle" slot="start"></ion-icon>
+              <strong>{{'DEBT_INFROMATION' | translate}}</strong>
+            </ion-item-divider>
+        </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item><ion-label>{{'DEBIT_TEXT' | translate}}</ion-label></ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item  > 
+                <ion-input type="text" [disabled]="true" [(ngModel)]="pinfo.borc"> </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+              <ion-item><ion-label>{{'PAYMENT_TEXT' | translate}}</ion-label></ion-item>
+            </ion-col>
+            <ion-col>
+                <ion-item  > 
+                    <ion-input type="text" [disabled]="true" [(ngModel)]="pinfo.odeme"> </ion-input>
+                </ion-item>
+            </ion-col>
+          </ion-row> 
+          <ion-row>
+              <ion-col>
+                <ion-item><ion-label>{{'CUSTOMER_CUSTOMER_LOCAL_BALANCE_LABEL_TEXT' | translate}}</ion-label></ion-item>
+              </ion-col>
+              <ion-col>
+                  <ion-item  > 
+                      <ion-input type="text" [disabled]="true" [(ngModel)]="pinfo.bakiye"> </ion-input>
+                  </ion-item>
+              </ion-col>
+            </ion-row> 
+        </ion-grid>
+</div> 
+
+
+<div *ngIf="type">  
+  <ion-grid *ngFor="let product of extredetail"> 
+    <ion-row>   
+      <ion-col>
+      <ion-item-divider color="light">
+        <ion-icon name="information-circle" slot="start"></ion-icon>
+        <strong>{{'INVOICE_INFORMATION' | translate}}</strong>
+      </ion-item-divider>
+    </ion-col>
+    </ion-row> 
+    <ion-row>
+      <ion-col class="allreports-table-col"><ion-item><ion-label>{{'DATE_TEXT' | translate}}</ion-label></ion-item> </ion-col>
+      <ion-col><ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="documentDate"></ion-input> </ion-item> </ion-col> 
+    </ion-row>
+    <ion-row>
+      <ion-col class="allreports-table-col"> <ion-item> <ion-label>{{'OPERATION_TEXT' | translate}}</ion-label></ion-item></ion-col>
+      <ion-col class="allreports-table-col"> <ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="product.Type"> </ion-input> </ion-item> </ion-col>
+    </ion-row>
+    <ion-row  > 
+      <ion-col class="allreports-table-col"> <ion-item> <ion-label>{{'DOCUMENT_NO' | translate}}.</ion-label> </ion-item></ion-col>
+      <ion-col class="allreports-table-col"> <ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="product.RefNumber"></ion-input> </ion-item> </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col class="allreports-table-col"> 
+          <ion-item> <ion-label>{{'SETTINGS_SETTINGS_V3_STORE_CODE_LABEL_TEXT' | translate}}</ion-label> </ion-item>  
+        </ion-col>
+        <ion-col class="allreports-table-col">   <ion-item> <ion-input type="text" [disabled]="true" [(ngModel)]="product.PolicyStoreCode"></ion-input> </ion-item> </ion-col>
+    </ion-row>
+    <ion-row>
+          <ion-col class="allreports-table-col"> 
+             <ion-item> <ion-label>{{'SALES_RESPONSIBLE' | translate}}</ion-label> </ion-item> 
+          </ion-col>
+          <ion-col class="allreports-table-col"> 
+            <ion-item>  <ion-input type="text" [disabled]="true" [(ngModel)]="product.SalespersonFirstLastName"></ion-input> </ion-item>
+          </ion-col>
+     </ion-row>  
+     
+  
+     <ion-row>
+       <ion-col>
+        <ion-item-divider color="light">
+          <ion-icon name="information-circle" slot="start"></ion-icon>
+          <strong color="primary"  >{{'PRODUCT_INFORMATION' | translate}}</strong> 
+        </ion-item-divider>
+    </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="allreports-table-col" size="6">
+        <ion-item> <ion-label>{{'PRODUCT_NAME' | translate}}</ion-label> </ion-item>
+      </ion-col>
+      <ion-col class="allreports-table-col" size="6">
+        <ion-item> 
+            <ion-input type="text" [disabled]="true" [(ngModel)]="product.ItemDescription"> </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row> 
+
+    <ion-row>
+      <ion-col class="allreports-table-col" size="6">
+        <ion-item> <ion-label>{{'SELECT-PRODUCT_PRODUCT_CODE_TEXT'}}</ion-label> </ion-item>
+      </ion-col>
+      <ion-col class="allreports-table-col" size="6">
+        <ion-item> 
+            <ion-input type="text" [disabled]="true" [(ngModel)]="product.ItemCode"> </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row> 
+
+    <ion-row>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> <ion-label>{{'PRODUCT_COLOR' | translate}}</ion-label> </ion-item>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> 
+              <ion-input type="text" [disabled]="true" [(ngModel)]="product.ColorDescription"> </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row> 
+      <ion-row>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> <ion-label>{{'PRODUCT_COLOR_CODE' | translate}}</ion-label> </ion-item>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="6">
+          <ion-item> 
+              <ion-input type="text" [disabled]="true" [(ngModel)]="product.ColorCode"> </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+    <ion-row>
+      <ion-col>
+          <ion-item-divider color="light">
+              <ion-icon name="information-circle" slot="start"></ion-icon>
+              <strong>{{'PAYMENT_INFORMATION' | translate}}</strong>
+            </ion-item-divider>
+      </ion-col>
+    </ion-row> 
+    <ion-row>
+      <ion-col>
+        <ion-item> <ion-label>{{'ORDER-DETAIL_PRICE_TEXT' | translate}}</ion-label></ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item  > 
+            <ion-input type="text" [disabled]="true" [(ngModel)]="product.Price"> </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row> 
+    <ion-row>
+        <ion-col>
+          <ion-item> <ion-label>{{'AMOUNT' | translate}}</ion-label></ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item  > 
+              <ion-input type="text" [disabled]="true" [(ngModel)]="product.Qty1"> </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>  
+      <ion-row>
+          <ion-col>
+            <ion-item>  <ion-label>{{'AMOUNT_TEXT' | translate}}</ion-label></ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item  > 
+                <ion-input type="text" [disabled]="true" [(ngModel)]="product.Doc_Amount"> </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>  
+        <ion-row>
+            <ion-col>
+              <ion-item>  <ion-label>{{'ORDER-DETAIL_DISCOUNT_RATE_TEXT' | translate}}</ion-label></ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item  > 
+                  <ion-input type="text" [disabled]="true" [(ngModel)]="product.Doc_LDiscountTotal"> </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>   
+          <ion-row>
+              <ion-col>
+                <ion-item>  <ion-label>{{'NET_AMOUNT' | translate}}</ion-label></ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item  > 
+                    <ion-input type="text" [disabled]="true" [(ngModel)]="product.Doc_NetAmount"> </ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row> 
+            <ion-row>
+                <ion-col>
+                  <ion-item>  <ion-label>{{'PAYMENT_PLAN_TEXT' | translate}}</ion-label></ion-item>
+                </ion-col>
+                <ion-col>
+                  <ion-item  > 
+                      <ion-input type="text" [disabled]="true" [(ngModel)]="product.PaymentPlanCode"> </ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>  
+    </ion-grid>  
+</div>  
+
+</ion-content>

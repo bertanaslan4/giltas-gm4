@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'PRODUCT_ADD_TO_ORDER_LIST_BUTTON_TEXT' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col style="align-self: center; text-align: -webkit-center;"
+        *ngIf="serverService.Settings.V3Settings.IsProductPhotos">
+        <ion-img *ngIf="color" [src]="imageURL + '&colorcode=' + color"
+          style="object-fit: cover; width: 139px; height: 140px;"></ion-img>
+        <ion-img *ngIf="!color" [src]="imageURL" style="object-fit: cover; width: 139px; height: 140px;"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="padding: 10px 0px 15px 5px;">
+        <ion-label>{{product.ItemDescription}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngIf="productSelectedQuantityMatrix.length>0 && sizes">
+        <ion-item>
+          <ion-label>{{'COLOR_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="color" (ngModelChange)="setSizes()" okText="{{ 'SELECT_OK_TEXT' | translate }}"
+            cancelText="{{ 'SELECT_CANCEL_TEXT' | translate }}">
+            <ion-select-option *ngFor="let color of productColorSizeMatrix" [value]="color['R/B']">
+              {{serverService.getColorDescription(color['R/B'])}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col *ngIf="productColors.length>0">
+        <ion-item>
+          <ion-label>{{'COLOR_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="color" okText="{{ 'SELECT_OK_TEXT' | translate }}"
+            cancelText="{{ 'SELECT_CANCEL_TEXT' | translate }}">
+            <ion-select-option *ngFor="let color of productColors" [value]="color.ColorCode">
+              {{serverService.getColorDescription(color.ColorCode)}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row style="align-items: center;" *ngIf="!sizes">
+      <ion-col size="3">
+        <ion-label>{{'INVENTORY_QUANTITY_TEXT' | translate}}:</ion-label>
+      </ion-col>
+      <ion-col size="3" class="ta-right">
+        <ion-icon style="font-size: 25px;" name="add" color="success" (click)="increase()"></ion-icon>
+      </ion-col>
+      <ion-col size="3" class="ta-center">
+        <ion-input type="number" placeholder="1" [(ngModel)]="selectedQuantityP"></ion-input>
+      </ion-col>
+      <ion-col size="3" class="ta-left">
+        <ion-icon style="font-size: 25px;" name="remove" color="danger" (click)="decrease()"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="serverService.Settings.G3Settings.UseInventoryInProductDetail && productSelectedQuantityMatrix2 && sizes">
+      <ion-col>
+        <ion-item-divider style="padding: 0px 16px 0 16px;" color="light">
+          <h6 slot="start">{{'INVENTORY_SIZE_TEXT' | translate}}</h6>
+          <h6 slot="end">{{'INVENTORY_QUANTITY_TEXT' | translate}}</h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item *ngFor="let item of productSelectedQuantityMatrix2" [ngClass]="(item.MaxQuantity>0)?'':'disabled'">
+            <ion-label>{{item.Size}}</ion-label>
+            <ion-input style="text-align: end;" type="number" autofocus="true" (input)="alertQuantity(item)"
+              [(ngModel)]="item.SelectedQuantity" [brmasker]="{mask:'00000', len:5}"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="!serverService.Settings.G3Settings.UseInventoryInProductDetail && productSelectedQuantityMatrix && sizes">
+      <ion-col>
+        <ion-item-divider style="padding: 0px 16px 0 16px;" color="light">
+          <h6 slot="start">{{'INVENTORY_SIZE_TEXT' | translate}}</h6>
+          <h6 slot="end">{{'INVENTORY_QUANTITY_TEXT' | translate}}</h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item *ngFor="let item of productSelectedQuantityMatrix" [ngClass]="(item.MaxQuantity>0)?'':'disabled'">
+            <ion-label>{{item.Size}}</ion-label>
+            <ion-input style="text-align: end;" type="number" autofocus="true" (input)="alertQuantity(item)"
+              [(ngModel)]="item.SelectedQuantity" [brmasker]="{mask:'00000', len:5}"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button *ngIf="product" shape="round" expand="full" (click)="addToBasket()">
+      {{'PRODUCT_ADD_TO_ORDER_LIST_BUTTON_TEXT' | translate }}
+      <ion-icon class="p-l-10" name="cart"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

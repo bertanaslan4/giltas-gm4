@@ -1,0 +1,208 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title> {{'PRODUCT_DETAIL_TITLE_TEXT' | translate}} </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col style="align-self: center; text-align: -webkit-center;"
+        *ngIf="serverService.Settings.V3Settings.IsProductPhotos">
+        <ion-img [src]="imageURL" style="object-fit: cover; width: 139px; height: 140px;"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-label>{{product.ItemDescription}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6> {{'PRODUCT_ORDER_TEXT' | translate}} </h6>
+        </ion-item-divider>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!--<ion-col *ngIf="sizes">
+        <ion-item>
+          <ion-label class="fw-bold">{{'COLOR_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="color" (ngModelChange)="setSizes()" multiple="false" cancelText="İptal"
+            okText="Tamam">
+            <ion-select-option *ngFor="let color of productColors" [value]="color.ColorCode">
+              {{serverService.getColorDescription(color.ColorCode)}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>-->
+      <ion-col *ngIf="sizes">
+        <ion-item>
+          <ion-label class="fw-bold">{{'COLOR_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="color" (ngModelChange)="setSizes()" multiple="false" cancelText="İptal"
+            okText="Tamam">
+            <ion-select-option *ngFor="let color of productColorSizeMatrix" [value]="color['R/B']">
+              {{serverService.getColorDescription(color['R/B'])}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <!-- <ion-col *ngIf="sizes && colHeaders && serverService.Settings.G3Settings.UseInventoryInProductDetail">
+        <ion-item>
+          <ion-label class="fw-bold">{{'INVENTORY_SIZE_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="selectedSize" (ngModelChange)="setSelectedSize()" multiple="false" cancelText="İptal"
+            okText="Tamam">
+            <ion-select-option *ngFor="let size of productColorSizeMatrixNew" [value]="size.ItemDim1Code">
+              {{size.ItemDim1Code}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col> -->
+
+
+      <ion-col *ngIf="sizes">
+        <ion-item>
+          <ion-label class="fw-bold">{{'INVENTORY_SIZE_TEXT' | translate}}</ion-label>
+          <ion-select [(ngModel)]="selectedSize" (ngModelChange)="setSelectedSize()" multiple="false" cancelText="İptal"
+            okText="Tamam">
+            <ion-select-option *ngFor="let size of colHeaders" [value]="size.ItemDim1Code">
+              {{size.ItemDim1Code}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label class="fw-bold">{{'INVENTORY_QUANTITY_TEXT' | translate}}</ion-label>
+          <ion-input [(ngModel)]="quantity" style="text-align: right;"></ion-input>
+          <!-- 
+          <ion-select multiple="false" cancelText="İptal" okText="Tamam">
+           [disabled]="quantities.length==0"
+            <ion-select-option *ngFor="let quantity of quantities" [value]="quantity">
+              {{quantity}}
+            </ion-select-option>  
+          </ion-select> -->
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="full" icon-end size="medium" (click)="addToBasket()">
+          {{ 'PRODUCT_ADD_TO_ORDER_LIST_BUTTON_TEXT' | translate }}
+          <ion-icon class="pl-5" name="cart"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6> {{'INVENTORY_TITLE' | translate}} </h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item (click)="gotoProductWarehouse()">
+            <ion-label>{{'STORE_INVANTORY' | translate}}</ion-label>
+            <ion-icon name="ios-arrow-forward" item-right></ion-icon>
+          </ion-item>
+          <ion-item (click)="gotoProductOtherStores()">
+            <ion-label>{{'OTHER_STORES' | translate}}</ion-label>
+            <ion-icon name="ios-arrow-forward" item-right></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="salesTypeLicense.charAt(1) == 1 || salesTypeLicense.charAt(2) == 1 || salesTypeLicense.charAt(4) == 1 || salesTypeLicense.charAt(5) == 1">
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6> {{'PRICE_LIST_TITLE' | translate}} </h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item *ngFor="let prices of productPrices">
+            {{prices.PaymentPlanDescription}}
+            <span *ngIf="prices.ColorCode">({{prices.ColorCode}})</span>
+            <ion-label class="ion-text-end fs-14">{{prices.Price}}{{getPriceGroup(prices.PaymentPlanCode)}}</ion-label>
+          </ion-item>
+          <ion-item *ngFor="let prices of productPricesIF">
+            {{prices.PriceGroupDescription}}
+            <span *ngIf="prices.ColorCode">({{prices.ColorCode}})</span>
+            <ion-label class="ion-text-end fs-14">{{prices.Price}}{{getPriceGroup(prices.PaymentPlanCode)}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="salesTypeLicense.charAt(0) == 1 || salesTypeLicense.charAt(3) == 1">
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6> {{'PRICE_LIST_TITLE_WS' | translate}} </h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item *ngFor="let prices of productPricesWS">
+            {{prices.PaymentPlanDescription}}
+            <span *ngIf="prices.ColorCode">({{prices.ColorCode}})</span>
+            <ion-label class="ion-text-end fs-14">{{prices.Price}}{{getPriceGroup(prices.PaymentPlanCode)}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6> {{'ATTRIBUTES_TITLE_TEXT' | translate}} </h6>
+        </ion-item-divider>
+        <ion-list *ngIf="productDetails">
+          <ion-item>
+            {{'SELECT-PRODUCT_PRODUCT_CODE_TEXT' | translate}}
+            <ion-label class="ion-text-end fs-14">{{productDetails.ItemCode}}</ion-label>
+          </ion-item>
+          <ion-item>
+            {{'TAX_GROUP' | translate }}
+            <ion-label class="ion-text-end fs-14">{{productDetails.ItemTaxGrCode}}</ion-label>
+          </ion-item>
+          <ion-item>
+            {{'PRODUCT_TYPE_TEXT' | translate}}
+            <ion-label class="ion-text-end fs-14">{{productDetails.ProductTypeDescription}}</ion-label>
+          </ion-item>
+          <ion-item>
+            {{'FIRST_ATT_TITLE' | translate}}
+            <ion-label class="ion-text-end fs-14">{{productDetails.ProductAtt01Desc}}</ion-label>
+          </ion-item>
+          <ion-item>
+            {{'SECOND_ATT_TITLE' | translate}}
+            <ion-label class="ion-text-end fs-14">{{productDetails.ProductAtt02Desc}}</ion-label>
+          </ion-item>
+          <ion-item *ngIf="!serverService.Settings.G3Settings.UseInventoryInProductDetail">
+            {{'INVENTORY_TEXT' | translate}}
+            <ion-label class="ion-text-end fs-14">{{productDetails.Inventory}} {{productDetails.MesureCode}}</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item-divider color="light">
+          <h6>{{'PRODUCT_SAME_TEXT' | translate}}</h6>
+        </ion-item-divider>
+        <ion-list>
+          <ion-item *ngIf="alternatives.length>0">
+            <ion-slides #slideId [options]="sliderConfig">
+              <ion-slide *ngFor="let alternative of alternatives" (click)="goToAlternativeProductDetail(alternative)">
+                <span style="font-size: 10px;">
+                  <img *ngIf="serverService.Settings.V3Settings.IsProductPhotos" [src]="imageURL"
+                    style="object-fit: cover; width: 49px; height: 49px;"><br> <br>
+                  {{alternative.ItemDescription}}
+                </span>
+              </ion-slide>
+            </ion-slides>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

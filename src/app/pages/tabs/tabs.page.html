@@ -1,0 +1,32 @@
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom" color="gmheader">
+    <ion-tab-button tab="home">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>{{ 'TABS_HOMEPAGE_TEXT' | translate }}</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="products">
+      <ion-icon name="apps"></ion-icon>
+      <ion-label>{{ 'TABS_PRODUCTS_TEXT' | translate }}</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="customers">
+      <ion-icon name="contacts"></ion-icon>
+      <ion-label>{{ 'TABS_CUSTOMERS_TEXT' | translate }}</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="proposal" badge>
+      <ion-icon name="cart"></ion-icon>
+      <ion-label>{{ 'TABS_ORDER_TEXT' | translate }}</ion-label>
+      <ion-badge *ngIf="serverService.getItemsLength() > 0">{{serverService.getItemsLength()}}</ion-badge>
+    </ion-tab-button>
+
+    <ion-tab-button tab="notifications" badge>
+      <ion-icon name="notifications"></ion-icon>
+      <ion-label>{{ 'NOTIFICATIONS' | translate }}</ion-label>
+      <ion-badge *ngIf="serverService.getNotificationCount() > 0">{{serverService.getNotificationCount()}}</ion-badge>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

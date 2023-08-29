@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'ATTRIBUTE-TYPES_TITLE_TEXT' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-searchbar placeholder="Filtrele" (ionInput)="onInput($event)" 
+                 cancelButtonText="{{ 'SEARCHBAR_CANCEL_BUTTON_TEXT' | translate }}"> </ion-searchbar>
+
+  <ion-list>
+    <ion-item *ngFor="let att of groupList" (click)="goToAttributePage(att.AttributeTypeCode)">
+      <ion-label>{{att.AttributeTypeDescription}}</ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

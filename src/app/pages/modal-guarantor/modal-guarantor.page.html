@@ -1,0 +1,230 @@
+<ion-header>
+    <ion-toolbar color="gmheader"> 
+      <ion-title>Kefil Ekle</ion-title>
+      <ion-buttons slot="start">
+          <ion-back-button (click)="closeModalCancel()"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+      <ion-grid>  
+          <ion-row>
+           <ion-col>
+      <ion-item-divider color="light">
+          <ion-icon name="person" slot="start"></ion-icon>
+          <ion-label>{{'GUARANTOR_INFORMATION' | translate}} </ion-label> 
+      </ion-item-divider>
+      
+        <ion-item>
+            <ion-label>Ad</ion-label>
+            <ion-input type="text" [(ngModel)]="guarantorName"  name="guarantorName"></ion-input>
+        </ion-item>
+  
+        <ion-item>
+            <ion-label>Soyad</ion-label>
+            <ion-input type="text" [(ngModel)]="guarantorLastName" name="guarantorLastName"> </ion-input>
+        </ion-item>
+  
+        <ion-item>
+            <ion-label><b>*&nbsp;</b>T.C. Kimlik No.</ion-label>
+            <ion-input type="number" inputmode="numeric" pattern="[0-9]*" [(ngModel)]="guarantorIdentityNum" name="guarantorIdentityNum" onselectstart="return false" 
+                onpaste="return false;" id="IdentityNum11" onCopy="return false" onCut="return false" onDrag="return false" onDrop="return false" autocomplete=off 
+                (keydown)="maxLength($event, 'IdentityNum11', 11)" (ionChange)='oninput($event)'> 
+            </ion-input>
+       </ion-item> 
+  
+       <ion-item-divider color="light"> 
+          <ion-icon name="call" slot="start"></ion-icon>
+          <ion-label> İletişim Bilgileri </ion-label>
+       </ion-item-divider>
+  
+       <ion-item>
+          <ion-label><b>*&nbsp;</b>Telefon</ion-label>
+          <ion-input type="tel" [(ngModel)]="guarantorTel" name="guarantorTel" [brmasker]="{mask:'00000000000', len:11}"></ion-input>
+      </ion-item> 
+  
+       <ion-item-divider color="light"> 
+          <ion-icon name="call" slot="start"></ion-icon>
+          <ion-label> {{'ADDRESS_INFORMATION' | translate}} </ion-label>
+      </ion-item-divider>
+  
+   
+           <ion-item>
+              <ion-label> <b>*&nbsp;</b> Adres Açıklaması</ion-label>
+              <ion-select [(ngModel)]="detail_AddressTypeCode">
+                  <ion-select-option *ngFor="let item of addressDescriptions" value="{{item.Code}}">{{item.Value}} </ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+              <ion-label  >Açık Adres</ion-label>
+              <ion-input type="text" [(ngModel)]="detail_Address">
+              </ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label> <b>*&nbsp;</b>Ülke </ion-label>
+              <ion-input type="text" [disabled]="true" placeholder="TR" [(ngModel)]="detail_CountryCode"></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label><b>*&nbsp;</b> Bölge </ion-label>
+              <ion-select TamamText="Tamam" [(ngModel)]="detail_StateCode"
+                  cancelText="İptal" [disabled]="" (ionChange)="onStateChange()">
+                  <ion-select-option *ngFor="let item of stateList" value="{{item.Code}}">{{item.Description}}</ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+              <ion-label> <b>*&nbsp;</b> İl </ion-label>
+              <ion-select TamamText="Tamam" [(ngModel)]="detail_CityCode"
+                  cancelText="İptal" [disabled]="" (ionChange)="onCityChange()">
+                  <ion-select-option *ngFor="let item of cityList" value="{{item.Code}}">{{item.Description}} </ion-select-option>
+              </ion-select>
+          </ion-item>
+          <ion-item>
+              <ion-label> <b>*&nbsp;</b>İlçe </ion-label>
+              <ion-select TamamText="Tamam" [(ngModel)]="detail_DistrictCode"
+                  cancelText="İptal" [disabled]="">
+                  <ion-select-option *ngFor="let item of districtList" value="{{item.Code}}">{{item.Description}} </ion-select-option>
+              </ion-select>
+          </ion-item>
+  
+          <ion-item>
+              <ion-label>{{'CUSTOMER_CUSTOMER_ADDRESS_NEIGHBORHOOD_LABEL_TEXT' | translate}} </ion-label>
+              <ion-input type="text" ngModel name="detail_QuarterName" > </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{'CUSTOMER_CUSTOMER_ADDRESS_STREET_LABEL_TEXT' | translate}} </ion-label>
+              <ion-input type="text" ngModel name="detail_StreetName" > </ion-input>
+            </ion-item>
+            
+          <ion-item>
+              <ion-label> Bina No.</ion-label>
+              <ion-input type="number" [(ngModel)]="detail_BuildingNum" name="detail_BuildingNum" [brmasker]="{mask:'0000', len:4}"></ion-input>
+           </ion-item>
+         <ion-item>
+              <ion-label>  Kat No. </ion-label>
+              <ion-input type="number" [(ngModel)]="detail_FloorNum" name="detail_FloorNum" [brmasker]="{mask:'0000', len:4}"></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-label>  Daire No. </ion-label>
+              <ion-input type="number" [(ngModel)]="detail_DoorNum" name="detail_DoorNum" [brmasker]="{mask:'0000', len:4}"> </ion-input>
+          </ion-item>  
+  
+        </ion-col>
+      </ion-row>
+  
+      <ion-row><!--Personel Information-->
+        <ion-col>
+            <ion-item-divider color="light"> 
+                <ion-icon name="call" slot="start"></ion-icon>
+                <ion-label> {{'PERSONEL_INFORMATION' | translate}} </ion-label>
+            </ion-item-divider>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+            <ion-item>
+                <ion-label><b>*&nbsp;</b>Doğum Yeri</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_BirthPlace">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label><b>*&nbsp;</b>Doğum Tarihi</ion-label>
+                <ion-datetime min="1935" displayFormat="DD/MM/YYYY" pickerFormat="DD MM YYYY"
+                    [(ngModel)]="personelInfo_BirthDate">
+                </ion-datetime>
+            </ion-item>
+            <ion-item>
+                <ion-label ><b>*&nbsp;</b>Cinsiyet</ion-label>
+                <ion-select TamamText="Tamam" [(ngModel)]="personelInfo_GenderCode"
+                    cancelText="İptal">
+                    <ion-select-option *ngFor="let item of genderCode" value="{{item.Code}}">{{item.Value}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item >
+                <ion-label>Anne Adı</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_MotherName">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Baba Adı</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_FatherName">
+                </ion-input>
+            </ion-item>
+            <ion-item  *ngIf="personelInfo_GenderCode == '2'">
+                <ion-label>Bekarlık Soyadı</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_MaidenName">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label >Aylık Kazanç</ion-label>
+                <ion-select TamamText="Tamam" [(ngModel)]="personelInfo_MonthlyIncome" cancelText="İptal">
+                    <ion-select-option *ngFor="let item of monthlyIncome" value="{{item.Code}}">{{item.Value}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item>
+                <ion-label >Ehliyet Tipi</ion-label>
+                <ion-select TamamText="Tamam" [(ngModel)]="personelInfo_DrivingLicenceType" cancelText="İptal">
+                    <ion-select-option *ngFor="let item of drivingLicenceType" value="{{item.Code}}">{{item.Value}}
+                    </ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item >
+                <ion-label>Ehliyet Numarası</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_DrivingLicenceTypeNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Kimlik Belgesi No.</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_IdentityCardNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Nüfusa Kayıtlı İl Kodu</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredCityCode" placeholder="TR.35">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Nüfusa Kayıtlı İlçe Kodu</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredDistrictCode" placeholder="TR.03502">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Nüfusa Kayıtlı Mahalle/Köy</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredTown">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Kayıtlı Sıra No.</ion-label>
+                <ion-input type="number" [(ngModel)]="personelInfo_RegisteredNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Kütük Kayıt No.</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredRecordNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Kayıtlı Aile Sıra No.</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredFamilyNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>Kayıtlı Cilt No.</ion-label>
+                <ion-input type="text" [(ngModel)]="personelInfo_RegisteredFileNum">
+                </ion-input>
+            </ion-item>
+            <ion-item >
+                <ion-label>SGK No.</ion-label>
+                <ion-input type="number" [(ngModel)]="personelInfo_SocialInsuranceNumber">
+                </ion-input>
+            </ion-item>
+        </ion-col>
+      </ion-row><!-- personnel information end -->
+     </ion-grid> 
+  </ion-content>
+  <ion-footer>
+      <ion-toolbar>
+          <ion-button type="button" expand="full" (click)="returnGuarantorData()">Ekle</ion-button>
+      </ion-toolbar>
+  </ion-footer>
+  

@@ -1,0 +1,43 @@
+<ion-content class="ion-padding">
+  <ion-grid class="login-grid-style">
+    <ion-row>
+      <ion-col class="ta-center">
+        <ion-img class="gm-img-style" src="../../assets/imgs/giltas_innovative_logo.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ta-center">
+        <h2 style="margin: 0;">GM</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ta-center">
+        <ion-img class="gm-img-style" src="../../assets/imgs/hm_vector_underline.png"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <form #form="ngForm" (ngSubmit)="Login(form)" method="post">
+            <ion-item>
+              <ion-label position="floating">Kullanıcı Adı</ion-label>
+              <ion-input (keyup.enter)="Login(form)" ngModel type="text" name="username"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Şifre</ion-label>
+              <ion-input (keyup.enter)="Login(form)" ngModel type="password" name="password"></ion-input>
+            </ion-item>
+            <ion-button type="submit" expand="full" color="primary">Giriş</ion-button>
+          </form>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ta-center">
+        <h6>Sistem Bütünleştirici © 2019</h6>
+        <p>GM v{{serverService?.VERSION}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

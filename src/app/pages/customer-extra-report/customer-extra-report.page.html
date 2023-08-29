@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+      <ion-title>{{'EXTRA_REPORT_DETAIL_TITLE' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+        <ion-button (click)="filterModal()" *ngIf="page == '0'">
+            <ion-icon name="search"></ion-icon>
+        </ion-button> 
+        <ion-button (click)="refreshFilter()">
+            <ion-icon name="refresh"></ion-icon>
+        </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-segment color="dark" [(ngModel)]="page">
+      <ion-segment-button value="0"> {{'EXTRA_TITLE' | translate}} </ion-segment-button>
+      <ion-segment-button value="1"> {{'PROPOSAL_INSTALLMENT_TEXT' | translate}} </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+
+    <ion-grid *ngIf="buttonClicked">
+        <ion-card *ngFor="let item of customerExtra">
+            <ion-card-content class="col_text">
+                <ion-row>
+                    <ion-col col-6 class="baslikblue"><ion-label>{{'OPERATION_TEXT' | translate}} :</ion-label> </ion-col>
+                    <ion-col col-6>
+                        <p class="col_text">{{item.Type}}</p>
+                        <p class="col_text">{{item.RefNumber}}</p>
+                        <p class="col_text">{{serverService.convertDateTime(item.DocumentDate) | date: 'yyyy-MM-dd'}}</p>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6"><ion-label>{{'DEBIT_TEXT' | translate}} :</ion-label>  </ion-col>
+                    <ion-col  size="6"> <ion-label>{{item.Loc_Debit + " ₺"}}</ion-label>  </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6"> <ion-label>{{'CUSTOMER_CUSTOMER_LOCAL_CREDIT_LABEL_TEXT' | translate}} </ion-label> : </ion-col>
+                    <ion-col  size="6"> <ion-label>{{item.Loc_Credit + " ₺"}}</ion-label> </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="6"> <ion-label>{{'CUSTOMER_CUSTOMER_LOCAL_BALANCE_LABEL_TEXT' | translate}}</ion-label>  </ion-col>
+                    <ion-col  size="6"><ion-label>{{item.Loc_BalanceAccumulative + " ₺"}} </ion-label> </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                     <ion-button expand="block" (click)="goToOrderDetails(item)">{{'ORDER_DETAIL_TITLE_TEXT' | translate}}</ion-button>
+                  </ion-col>
+                </ion-row>
+            </ion-card-content>
+        </ion-card>
+    </ion-grid>
+
+
+    <ion-grid *ngIf="page == '0' && !buttonClicked">
+        <ion-row id="headerStyle" class="headerStyle">
+            <ion-col size="4" class="allreports-table-col"><strong>{{'DATE_TEXT' | translate}}</strong></ion-col>
+            <ion-col size="4" class="allreports-table-col"><strong>{{'DOCUMENT_NO' | translate}}</strong></ion-col>
+            <ion-col size="4" class="allreports-table-col"><strong>{{'AMOUNT_TEXT' | translate}}</strong></ion-col>
+        </ion-row> 
+        <div *ngIf="!serverService.Settings.V3Settings.IsExchange">
+            <ion-row class="allreports-table-row" *ngFor="let item of customerExtraResult; let i = index;" (click)="goToOrderDetails(item)"
+                    [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}">
+                <ion-col size="4" class="allreports-table-col">
+                    {{serverService.convertDateTime(item.DocumentDate) | date: 'yyyy-MM-dd'}}
+                </ion-col> 
+                <ion-col size="4" class="allreports-table-col">
+                    {{item.RefNumber}}
+                </ion-col>
+                <ion-col size="4" class="allreports-table-col" *ngIf="!checkNetAmount">
+                  {{item.NetAmount}} ₺
+                </ion-col> 
+                <ion-col size="4" class="allreports-table-col" *ngIf="checkNetAmount">
+                    {{item.Doc_NetAmount}} ₺
+                </ion-col>
+            </ion-row>
+        </div> 
+    </ion-grid> 
+
+    <ion-grid *ngIf="page == '1'">
+      <ion-row class="allreports-table-row">
+        <ion-col class="allreports-table-col"><ion-label><strong>{{'INSTALLMENT_DATE' | translate}} </strong></ion-label></ion-col>
+        <ion-col class="allreports-table-col"><ion-label><strong>{{'INSTALLMENT_AMOUNT' | translate}} </strong></ion-label></ion-col>
+      </ion-row>
+      <ion-row class="allreports-table-row" *ngFor="let item of installments_summary; let i = index;" (click)="goToInstallmentDetails(item)"
+              [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}">
+        <ion-col class="allreports-table-col"> 
+            <ion-label>{{item.DueDate}}</ion-label>  
+        </ion-col>
+        <ion-col class="allreports-table-col">
+           <ion-label>{{item.InstallmentAmount}} ₺</ion-label> 
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+</ion-content>
+<ion-footer>
+    <ion-card>
+        <ion-card-content>            
+            <ion-row *ngIf="page == '1'" text-center>
+                <ion-col><strong class="bottomtext">{{'TOTAL_INSTALLMENT_AMOUNT' | translate}}</strong> </ion-col>
+                <ion-col><strong class="bottomtext">{{installmentTotal + " ₺"}}</strong></ion-col>
+            </ion-row>
+            <ion-row *ngIf="page == '0'" text-center>
+                <ion-col><strong class="bottomtext">{{'TOTAL_AMOUNT' | translate}}</strong> </ion-col>
+                <ion-col><strong class="bottomtext">{{tempTotal + " ₺"}}</strong></ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>    
+</ion-footer> 

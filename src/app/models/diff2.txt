@@ -1,0 +1,29 @@
+<ion-col size="12" *ngFor="let detail of customerModel.Communications">
+                <ion-item *ngIf="detail.CommunicationTypeCode == 1">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_PHONE_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel" [brmasker]="{mask:'00000000000', len:12}" placeholder="9002324444444"
+                        [disabled]="!editMode || detail.CommAddress != null && detail.CommunicationID != null"
+                        [(ngModel)]="detail.CommAddress"></ion-input>
+                </ion-item>
+
+                <ion-item *ngIf="detail.CommunicationTypeCode == 2">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_FAX_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel"
+                        [disabled]="!editMode ||  detail.CommAddress != null && detail.CommunicationID != null"
+                        [brmasker]="{mask:'00000000000', len:12}" [(ngModel)]="detail.CommAddress"
+                        placeholder="9002324444444"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="detail.CommunicationTypeCode == 3">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_EMAIL_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="e-mail"
+                        [disabled]="!editMode ||  detail.CommAddress != null && detail.CommunicationID != null"
+                        [(ngModel)]="detail.CommAddress"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="detail.CommunicationTypeCode == 7">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_CELLPHONE_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel"
+                        [disabled]="!editMode ||  detail.CommAddress != null && detail.CommunicationID != null"
+                        [brmasker]="{mask:'00000000000', len:12}" [(ngModel)]="detail.CommAddress"></ion-input>
+
+                </ion-item>
+            </ion-col>

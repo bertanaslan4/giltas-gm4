@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'INSTALLMENT_DETAIL' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button defaulthref=""> 
+        <ion-back-button></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>   
+<ion-grid>
+  <ion-row class="allreports-table-row">
+    <ion-col class="allreports-table-col" size="6"><strong>{{'INSTALLMENT_DATE' | translate}}</strong></ion-col>
+    <ion-col class="allreports-table-col" size="6"><strong>{{'INSTALLMENT_AMOUNT' | translate}}</strong></ion-col>
+  </ion-row>
+  <ion-row class="allreports-table-row" *ngFor="let item of installments; let i = index;" [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}">
+    <ion-col class="allreports-table-col" size="6"><ion-label>{{serverService.convertDateTime(item.DueDate) | date: 'dd-MM-yyyy'}}</ion-label></ion-col>
+    <ion-col class="allreports-table-col" size="6"><ion-label>{{item.RemainingInstallment}} ₺</ion-label></ion-col>
+  </ion-row>
+</ion-grid>
+</ion-content>

@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>Ürünleri Filtrele</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <form #form="ngForm" (ngSubmit)="searchProduct(form)" method="POST">
+      
+      <ion-item>
+        <ion-label position="floating">Ürün Adına Göre</ion-label>
+        <ion-input (keyup.enter)="searchProduct(form)" ngModel type="text" name="ItemDescription"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Ürün Koduna Göre</ion-label>
+        <ion-input (keyup.enter)="searchProduct(form)" ngModel type="text" name="ItemCode"></ion-input>
+      </ion-item>
+
+      <ion-button type="submit" expand="block" color="primary">Ara</ion-button>
+    </form>
+  </div>
+</ion-content>

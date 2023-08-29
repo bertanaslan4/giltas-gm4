@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{ 'PRODUCTS_TITLE_TEXT' | translate }}<ion-icon class="head-icon" name="basket"></ion-icon></ion-title>
+    <ion-buttons slot="start" *ngIf="pageRoute != '/tabs/products'">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="pageRoute == '/tabs/products'">
+      <ion-back-button routerLink="/tabs/home" routerDirection="root"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding ta-center">
+
+  <div (click)="scanBarcode()" class="barcode_pic">
+    <ion-icon style="display: inline;" name="barcode"></ion-icon>
+    <span>{{'BARCODE_READER_TEXT' | translate}}</span>
+  </div>
+  <hr style="margin-top: 20px;">
+  <ion-button shape="round" expand="full" routerLink="product-groups" routerDirection="forward">
+    <ion-icon name="basket"></ion-icon>
+    <span class="p-l-10">
+      {{'PRODUCT_GROUP_FEATURES' | translate}}
+    </span>
+  </ion-button>
+  <hr style="margin-top: 20px;">
+  <ion-button shape="round" expand="full" routerLink="product-filter" routerDirection="forward">
+    <ion-icon name="search"></ion-icon>
+    <span class="p-l-10">
+      {{'PRODUCT-MENU_SELECT_PRODUCT_SEACRCH' | translate }}
+    </span>
+  </ion-button>
+
+
+
+</ion-content>

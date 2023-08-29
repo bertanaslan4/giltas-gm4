@@ -1,0 +1,113 @@
+<ion-header>
+    <ion-toolbar color="gmheader"> 
+        <ion-title>{{ 'ORDER-DETAIL_TITLE_TEXT' | translate }}</ion-title>  
+        <ion-buttons slot="start">
+            <ion-back-button defaulthref=""></ion-back-button>
+      </ion-buttons> 
+      <ion-buttons slot="end">
+        <ion-button [disabled]="!serverService.Settings.G3Settings.EnableMultipleView" (click)="onButtonClick()">
+            <ion-icon name="openfolder" [name]="buttonClicked ? 'list' :'albums'"></ion-icon>
+        </ion-button>
+     </ion-buttons>
+    </ion-toolbar>  
+    <ion-row [ngStyle]="{'display': (!buttonClicked) ? 'flex' : 'none'}" class="headerStyle">
+        <ion-col><b>{{'ITEM_CODE_TEXT' | translate}}</b></ion-col> 
+        <ion-col><b>{{'INVENTORY_QUANTITY_TEXT' | translate}}</b></ion-col>
+        <ion-col><b>{{'ORDER-DETAIL_PRICE_TEXT' | translate}}</b></ion-col>
+        <ion-col><b>{{'AMOUNT_TEXT' | translate}}</b></ion-col>
+    </ion-row> 
+  </ion-header>
+
+<ion-content  class="ion-padding"> 
+    <ion-grid *ngIf="buttonClicked">
+    <ion-card *ngFor="let item of details; let i = index;">
+    <ion-row class="allreports-table-row">
+        <ion-col size="12">  
+            <ion-item>
+                    <ion-icon name="filing" slot="start"></ion-icon>
+                    <ion-text>{{ item.ItemDescription }}</ion-text> 
+            </ion-item>
+        </ion-col>
+        <ion-col size="12">
+             <ion-item>
+                <ion-text><span style="font-size: 17px; text-align: center;" [innerHTML]="'(#' + item.ItemCode + ')'"></span></ion-text>
+            </ion-item>
+       </ion-col>
+    </ion-row>
+      <ion-row class="allreports-table-row">
+            <ion-col size="6">
+             <ion-item>
+                <ion-icon name="cart" slot="start"></ion-icon> 
+                <ion-text style="text-align: center;">{{item.Qty1}}</ion-text> 
+              </ion-item>
+            </ion-col> 
+            <ion-col size="6">
+                <ion-item style="border: none;">
+                     <ion-icon name="pricetag" slot="start"></ion-icon>
+                     <ion-label style="text-align: center;"> {{item.Price + " ₺"}} </ion-label>
+                </ion-item>
+          </ion-col> 
+        </ion-row>  
+
+        <ion-card>
+            <ion-row class="allreports-table-row">
+                <ion-col> 
+                    <ion-item> 
+                        <ion-text><b>Tutar:</b></ion-text>
+                        <ion-text slot="end">{{item.Doc_Amount + " ₺"}} </ion-text>
+                    </ion-item>
+                </ion-col>
+                <!-- <ion-col>
+                    <ion-item></ion-item>
+                </ion-col> -->
+            </ion-row>
+      </ion-card>
+     </ion-card>
+</ion-grid>
+
+<div *ngIf="!buttonClicked">
+    <ion-grid *ngIf="serverService.Settings.G3Settings.UseCustomPrice">
+        <ion-row class="allreports-table-row" *ngFor="let item of details; let i = index;" [ngStyle]="{'background-color': i % 2 == 0 ? '#dbdbdb52' : '#ffffff'}">
+            <ion-col size="3">
+                <ion-label>{{item.ItemCode}}</ion-label>
+            </ion-col>
+            <ion-col size="3">
+                <ion-label>{{item.Qty1}}</ion-label>
+            </ion-col>
+            <ion-col *ngIf="details.LDisRate1 > 0" size="3"> 
+                <ion-label>{{item.Doc_Price - (item.LDisRate1*details.Doc_Price/100)}}₺</ion-label>
+            </ion-col>
+            <ion-col *ngIf="details.LDisRate1 == 0" size="3">
+                  <ion-label>{{item.Doc_Price}}₺</ion-label>
+            </ion-col>
+            <ion-col size="3">
+                <ion-label>{{item.Qty1 * (details.Doc_Price - (details.LDisRate1*details.Doc_Price/100))}}₺</ion-label>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="!serverService.Settings.G3Settings.UseCustomPrice">
+            <ion-row class="allreports-table-row" *ngFor="let item of details; let i = index;" [ngStyle]="{'background-color': i % 2 == 0 ? '#dbdbdb52' : '#ffffff'}">
+                <ion-col size="3">
+                    <ion-label>{{item.ItemCode}}</ion-label>
+                </ion-col>
+                <ion-col size="3"> 
+                    <ion-label>{{item.Qty1}}</ion-label>
+                </ion-col>
+                <ion-col size="3">
+                    <ion-label>{{item.Price}}₺</ion-label>
+                </ion-col> 
+                <ion-col size="3">
+                    <ion-label style="margin-left: 5px;">{{item.Doc_Amount}}₺</ion-label>
+                </ion-col>
+            </ion-row>
+    </ion-grid>
+</div>
+</ion-content>
+<ion-footer>
+    <ion-card>
+            <ion-card-content style="text-align: center; font-size: 20.5px; color: #002D61; font-weight: bold;">
+                    <span>Toplam : </span> {{total + " ₺"}}                                 
+            </ion-card-content>
+    </ion-card>   
+</ion-footer>

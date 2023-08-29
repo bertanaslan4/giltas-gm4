@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{ 'PRODUCTS_TITLE_TEXT' | translate }}</ion-title>
+    <ion-buttons slot="start" defaulthref="">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item (click)="goToProducDetailPage(product)" *ngFor="let product of productList">
+      <ion-thumbnail *ngIf="serverService.Settings.V3Settings.IsProductPhotos && product.ItemCode" slot="start">
+        <img [defaultImage]="'assets/imgs/imageLoader.svg'" [lazyLoad]="serverService.Settings.G3Settings.ImageUrl + '/Home/GetThumb?itemcode='+ product.ItemCode"/>
+       
+        
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{product.ItemDescription}}</h2>
+        <h3>{{ 'PRODUCTS_PRODUCT_CODE_TEXT' | translate }} {{product.ItemCode}}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list> 
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Yükleniyor...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  
+</ion-content>

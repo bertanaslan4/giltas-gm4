@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="gmheader"> 
+    <ion-title>Arama Sayfası</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="closeModalCancel()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+     <ion-row>
+      <ion-col>  
+          <ion-input type="text" [(ngModel)]="customerName" placeholder="Müşteri Adı..."></ion-input>              
+      </ion-col>
+  </ion-row>
+    <ion-row>
+          <ion-col>  
+              <ion-input type="text" [(ngModel)]="orderNumber" placeholder="Sipariş Numarası..."></ion-input>   
+          </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label style="text-align: center;">Tarih Aralığı Giriniz</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+  <ion-row>
+      <ion-col size="6">    
+          <ion-datetime min="2000" displayFormat="DD/MM/YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="startDate" placeholder="Başlangıç..."></ion-datetime> 
+      </ion-col>        
+      <ion-col size="6">  
+          <ion-datetime class="datetime2" min="2000" displayFormat="DD/MM/YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="endDate" placeholder="Bitiş.."></ion-datetime> 
+      </ion-col> 
+  </ion-row>   
+  <ion-row class="btnler">
+    <ion-col>
+        <ion-button expand="block" (click)="closeModal()">Filtrele</ion-button>
+        <ion-button expand="block" (click)="closeModal()">Iptal</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid> 
+</ion-content> 

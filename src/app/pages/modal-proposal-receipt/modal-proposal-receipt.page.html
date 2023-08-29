@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>Fiş</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="closeModal()"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid >
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder" id="Date">Tarih:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label id="Dateval">{{Date}}</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder" id="Ref">Referans Numarası:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label id="Refval">{{refNo}}</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder" id="Custo">Müşteri Adı:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label id="Custoval">{{customerName}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder" id="Custocod">Müşteri Kodu:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label id="Custocodval">{{customerCode}}</ion-label>
+      </ion-col>
+    </ion-row>
+    <hr />
+
+
+    <ion-item style="margin-left: -22px;" *ngFor="let item of products">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            {{item.ItemDescription}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12"
+            *ngIf="item.UseSerialNumber == true && this.serverService.Settings.V3Settings.SalesType == 5">
+            Seri No: {{item.seriNumber}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="4">
+            Adet: {{item.Qty1}}
+          </ion-col>
+          <ion-col size="4">
+            Fiyat: {{item.Price}}{{serverService.Settings.G3Settings.Currency}}
+          </ion-col>
+          <ion-col size="4">
+            Toplam: {{item.Price * item.Qty1}}{{serverService.Settings.G3Settings.Currency}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <hr />
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder">Toplam:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+          <ion-label id="top">{{getTotal()}}{{serverService.Settings.G3Settings.Currency}}</ion-label>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder">Açıklama:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+          <ion-label id="info">{{infoText}}</ion-label>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder">Satış Sorumlusu:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+          <ion-label id="personelname">{{this.serverService.Settings.V3Settings.SalespersonName}}</ion-label>
+        </ion-col>
+    </ion-row>
+
+    <ion-row class="padding-top-bottom-5">
+      <ion-col size="6">
+        <ion-label class="f-w-bolder" text-wrap id="personelcode">Satış Sorumlusu Kodu:</ion-label>
+      </ion-col>
+      <ion-col size="6">
+        <ion-label id="Dateval">{{this.serverService.Settings.V3Settings.SalespersonNameCode}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer >
+  <ion-toolbar style="text-align:center;">
+      <ion-button class="receipt-button" block color="primary" (click)="closeModal()">Geri</ion-button>
+      <ion-button class="receipt-button" block color="success" (click)="createPdf()">Yazdır</ion-button>
+  </ion-toolbar>
+</ion-footer>

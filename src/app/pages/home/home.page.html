@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{ 'HOME_TITLE_TEXT' | translate }}<ion-icon class="head-icon-home" name="home"></ion-icon></ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button (click)="personButtonFunction($event)">
+        <ion-icon name="person" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="col-style b-right b-bottom" (click)="goToProductsPage()">
+          <img class="products img-style"/>
+          <h6 class="fs-13">{{ 'HOME_PRODUCT_TEXT' | translate }}</h6>
+      </ion-col>
+      <ion-col class="col-style b-bottom" (click)="goToCustomersPage()">
+          <img class="customers img-style"/>
+          <h6 class="fs-13">{{ 'HOME_CUSTOMER_TEXT' | translate }}</h6>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="col-style b-right" (click)="goToProposalPage()">
+          <img class="proposal img-style"/>
+          <h6 class="fs-13">{{ 'HOME_ORDER_TEXT' | translate }}</h6>
+      </ion-col>
+      <ion-col class="col-style" (click)="goToReportsPage()">
+          <img class="reports img-style"/>
+          <h6 class="fs-13">{{ 'HOME_REPORTS_TEXT' | translate }}</h6>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

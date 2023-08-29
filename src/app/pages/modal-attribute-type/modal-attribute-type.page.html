@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-toolbar color="gmheader">
+      <ion-title>{{'WORK_CONDITION_TEXT' | translate}}</ion-title> 
+      <ion-buttons slot="start">
+        <ion-back-button (click)="closeModalCancel()"></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content>
+
+    <ion-searchbar [(ngModel)]="myInput"  showCancelButton="true"  placeholder="Meslek Ara..." > 
+    </ion-searchbar>
+    <ion-list>
+        <ion-item *ngFor="let att of attributeType17List" (tap)="goToCustomerPage(att)">
+          {{att.AttributeDescription}}
+        </ion-item>
+      </ion-list>
+
+</ion-content>

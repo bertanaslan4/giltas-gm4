@@ -1,0 +1,111 @@
+page-proposal-receipt {
+    
+    ::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+    display: none;
+    }
+
+
+    ion-header {
+        .toolbar {          
+           .toolbar-background {
+            background: transparent;
+          }          
+        }
+        .button-inner {
+            color: #30A0BA;                   
+        }
+    }   
+
+    button:nth-child(1) {
+        margin-top: 15px;
+    }
+
+    .texttop {
+        color: #30A0BA; // text color for confirm alerts
+        text-align: center;    
+        font-size: 25px;    
+    }       
+
+    .center{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .inputtext {
+        margin-top: 15px !important;
+        border: 1px solid #D0D0D0;     
+        border-radius: 5px !important;        
+        caret-color: #30A0BA;                     
+    }     
+
+    button {
+        border-radius: 5px !important;
+        height: 40px !important;
+    }
+
+    input.text-input.text-input-md {
+        opacity: 1;
+        text-align: left;
+        font-size: 13px;
+    }
+    .text-input-md {
+        margin: 11px 7px;
+        padding: 0;
+        width: calc(100% - 8px - 8px);
+    }  
+
+    .text-input-ios {
+        margin-left: 14px;
+        padding: 0;
+        width: calc(100% - 8px - 8px);
+    } 
+
+    .datetime-md {
+        padding: 11px 10px 8px 8px;
+    }
+    .datetime-text {
+        font-size: 13px;
+    }
+
+    .datetime {
+        margin-top: 10px !important;
+        border: 1px solid #D0D0D0;
+        border-radius: 5px !important;
+        height: 40px !important;
+    }
+
+    .datetime2 {
+        margin-top: 43px !important;
+        border: 1px solid #D0D0D0;
+        border-radius: 5px !important;
+        height: 40px !important;
+    }
+    
+    ion-datetime {
+        margin-top: 5px !important;
+        border: 1px solid #D0D0D0;
+        border-radius: 5px !important;
+        height: 40px !important;
+    }
+
+    ion-footer {
+        padding: 10px;      
+        .receipt-button {
+            display: -webkit-inline-box;
+            margin-top: 0;
+            width: 49%;
+        }  
+    }
+
+    .item-md {        
+        padding-left: 0;        
+    }
+   
+}
+ion-row.padding-top-bottom-5{
+    padding: 5px 0 5px 0px !important;
+}

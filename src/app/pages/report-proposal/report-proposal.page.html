@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{  'SELECT-ORDER_TITLE_TEXT' | translate }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="filterModal()">
+        <ion-icon name="search"></ion-icon>
+      </ion-button>
+      <ion-button (click)="onButtonClick()" [disabled]="!serverService.Settings.G3Settings.EnableMultipleView">
+        <ion-icon name="folder-open" [name]="buttonClicked ? 'list' :'albums'"> </ion-icon>
+      </ion-button>
+      <ion-button (click)="refreshFilter()">
+        <ion-icon name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-row [ngStyle]="{'display': (!buttonClicked) ? 'flex' : 'none'}" class="headerStyle">
+      <ion-col><b>{{'CUSTOMER_TITLE' | translate}}</b></ion-col>
+      <ion-col><b>{{'ORDER_NUMBER_TEXT' | translate}}</b></ion-col>
+      <ion-col><b>{{'DATE_TEXT' | translate}}</b></ion-col>
+      <ion-col *ngIf="serverService.Settings.G3Settings.ShowTotalInReports"><b>{{'AMOUNT_TEXT' | translate}}</b></ion-col>
+    </ion-row>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid *ngIf="buttonClicked">
+    <ion-card *ngFor="let item of items">
+      <ion-item>
+        <ion-col size="4">
+          <ion-icon name="person"></ion-icon>
+          <ion-text>{{item.CurrAccDescription}}</ion-text>
+        </ion-col>
+        <ion-col size="4">
+          <ion-icon name="calendar"></ion-icon>
+          <ion-text>{{serverService.convertDate(item.OrderDate)}}</ion-text>
+        </ion-col>
+        <ion-col size="4">
+          <ion-icon name="clipboard"></ion-icon>
+          <ion-text>{{item.OrderNumber}}</ion-text>
+        </ion-col>
+      </ion-item>
+      <ion-card-content>
+        <ion-item>
+          <ion-col>
+            <ion-button (click)="goToReportProposalDetails(item.OrderNumber)" expand="block">Sipariş Detayı</ion-button>
+          </ion-col>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+
+  <ion-grid *ngIf="!buttonClicked">
+    
+    <ion-row class="allreports-table-row" [ngStyle]="{'background-color': i % 2 == 0 ? '#dbdbdb52' : '#ffffff'}" 
+             (click)="goToReportProposalDetails(item.OrderNumber)" *ngFor="let item of items; let i = index;">
+      <ion-col class="allreports-table-col">
+        <ion-label >{{item.CurrAccDescription}}</ion-label>
+      </ion-col>
+      <ion-col class="allreports-table-col">
+        <ion-label >{{item.OrderNumber}}</ion-label>
+      </ion-col>
+      <ion-col class="allreports-table-col">
+        <ion-label >{{serverService.convertDate(item.OrderDate)}}</ion-label>
+      </ion-col>
+      <ion-col *ngIf="serverService.Settings.G3Settings.ShowTotalInReports">
+        <ion-label>{{item.Tutar}} ₺</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{ 'CUSTOMERS_TITLE_TEXT' | translate }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+        <ion-button (click)="goToCustomerDetailPage()">
+          <ion-icon name="add" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen>
+  <ion-list *ngIf= "this.serverService.Settings.V3Settings.SalesType == 0 || this.serverService.Settings.V3Settings.SalesType == 3">
+    <ion-item *ngFor="let customer of items" (click)="goToCustomerDetailPageParams(customer)">
+      <ion-label class="customer-info">
+      <h2>{{customer.CustomerName}}</h2>
+      </ion-label>
+      <ion-label class="customer-info customer-info-end">
+        <h2>{{customer.CurrAccCode}}</h2>
+      </ion-label>
+    </ion-item> 
+  </ion-list>
+  <ion-list *ngIf= "this.serverService.Settings.V3Settings.SalesType != 0 && this.serverService.Settings.V3Settings.SalesType != 3">
+    <ion-item *ngFor="let customer of items" (click)="goToCustomerDetailPageParams(customer)">
+      <ion-label class="customer-info">
+      <h2>{{customer.FirstName}} {{customer.LastName}}</h2>
+        <p>{{customer.Address}}</p>
+      </ion-label>
+      <ion-label class="customer-info customer-info-end">
+        <h2>{{customer.IdentityNum}}</h2>
+        <h3>{{customer.Mobile}}</h3>
+      </ion-label>
+    </ion-item> 
+  </ion-list>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Yükleniyor...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

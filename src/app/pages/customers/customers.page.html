@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'SEARCH_CUSTOMER' | translate}}<ion-icon class="head-icon" name="contacts"></ion-icon></ion-title>
+    <ion-buttons slot="start" *ngIf="pageRoute != '/tabs/customers'">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="start" *ngIf="pageRoute == '/tabs/customers'">
+      <ion-back-button routerLink="/tabs/home" routerDirection="root"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="addNewCustomer()"><!--routerLink="/tabs/customers/customer-detail" routerDirection="forward"-->
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form #form="ngForm" (ngSubmit)="searchCustomers(form)" method="post">
+
+    
+    <ion-item >
+      <ion-label position="floating">{{'CUSTOMER_TYPE' | translate}}</ion-label>   
+      <ion-select [disabled]="false" (keyup.enter)="searchCustomers(form)"  [(ngModel)]="CurrAccType11.CurrAccTypeCode" name ="CurrAcc_TypeCode">    
+        <ion-select-option *ngFor="let CurrAccType of CurrAccTypeList" value="{{this.CurrAccType.CurrAccTypeCode}}">
+           {{this.CurrAccType.CurrAccTypeDescription}}
+        </ion-select-option>
+    </ion-select>     
+    </ion-item> 
+    <!-- <ion-item *ngIf="this.serverService.Settings.V3Settings.SalesType != 0">
+      <ion-label position="floating">{{'CUSTOMER_TYPE' | translate}}</ion-label>   
+      <ion-input type="text" (keyup.enter)="searchCustomers(form)" [disabled]="true"  name ="CurrAcc_TypeCode" value = "{{this.CurrAccType11.CurrAccTypeCode}}" ></ion-input>
+    </ion-item>  -->
+
+      <!-- <ion-select>    
+        <ion-select-option *ngFor="let CurrAccType of CurrAccTypeList" value="{{CurrAccType.CurrAccTypeCode}}">
+           {{CurrAccType.CurrAccTypeDescription}}
+        </ion-select-option>
+    </ion-select>      -->
+    
+  <!--
+    <ion-item>
+      <ion-label position="floating">{{'CUSTOMER_TYPE' | translate}}</ion-label>   
+      <ion-input type="text" [disabled]="true" ngModel ></ion-input>
+    </ion-item>
+
+     <ion-item >
+      <ion-label position="floating">{{'CUSTOMER_NAME' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="name"></ion-input>
+    </ion-item>
+    <ion-item >
+      <ion-label position="floating">{{'CUSTOMER_LAST_NAME' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="surname"></ion-input>
+    </ion-item> -->
+    <ion-item>
+      <ion-label position="floating">{{'CUSTOMER_NAME_LASTNAME' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="name_surname" [required]="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{'CUSTOMER_CODE' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="customercode"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{'CUSTOMER_ID' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="idno"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">{{'CUSTOMER_PHONE' | translate}}</ion-label>
+      <ion-input (keyup.enter)="searchCustomers(form)" ngModel type="text" name="telno"></ion-input>
+    </ion-item><br><br>
+
+    <ion-button type="submit" expand="full" color="primary">{{'SEARCH_BUTTONS' | translate}}</ion-button>
+  </form>
+
+</ion-content>

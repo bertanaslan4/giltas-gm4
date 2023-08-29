@@ -1,0 +1,23 @@
+<ion-col size="12" *ngFor="let detail of customerModel.Communications">
+                <ion-item *ngIf="detail.CommunicationTypeCode == 1">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_PHONE_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel" placeholder="**02324444444" [disabled]="!editMode" placeholder="9002324444444"
+                        [brmasker]="{mask:'00000000000', len:12}" [(ngModel)]="detail.CommAddress"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="detail.CommunicationTypeCode == 2">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_FAX_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel" placeholder="**02324444444" [disabled]="!editMode" placeholder="9002324444444"
+                        [brmasker]="{mask:'00000000000', len:12}" [(ngModel)]="detail.CommAddress"></ion-input>
+                </ion-item>
+                <ion-item *ngIf="detail.CommunicationTypeCode == 3">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_EMAIL_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="e-mail" [disabled]="!editMode" [(ngModel)]="detail.CommAddress"></ion-input>
+                </ion-item>
+
+                <ion-item *ngIf="detail.CommunicationTypeCode == 7">
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_CELLPHONE_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="tel" [disabled]="!editMode" [brmasker]="{mask:'00000000000', len:11}"
+                        [(ngModel)]="detail.CommAddress"></ion-input>
+
+                </ion-item>
+            </ion-col>

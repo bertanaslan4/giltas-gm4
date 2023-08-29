@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'SHIPMENTS' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item (click)="presentConfirmAlert(item)" *ngFor="let item of list">
+      <ion-label>
+        <h2>{{'SENDING_STORE' | translate}} :  </h2>
+        <h3>{{item.FromStoreDescription}}  {{item.ItemDescription}}</h3>
+        <p>{{item.ItemCode}} - {{item.Barcode}}</p>
+      </ion-label>
+      <ion-label class=" shipments-info-end">
+        <h2>{{serverService.getColorDescription(item.ColorCode)}}</h2>
+        <h3>{{item.ItemDim1Code}}</h3>
+      </ion-label>
+    </ion-item> 
+  </ion-list>
+</ion-content>

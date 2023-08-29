@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'OPEN_ORDERS' | translate}}<ion-icon class="head-icon" name="contacts"></ion-icon></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item (click)="presentConfirmAlert(item)" *ngFor="let item of list">
+      <ion-label>
+        <h2>{{'WISHING_STORE' | translate}} {{item.toStoreDescription}} : </h2>
+        <h3>{{item.ItemDescription}}</h3>
+        <p>{{item.ItemCode}}</p>
+      </ion-label>
+      <ion-label class=" open-orders-info-end">
+        <h2>{{serverService.getColorDescription(item.ColorCode)}}</h2>
+        <h3>{{item.ItemDim1Code}}</h3>
+      </ion-label>
+    </ion-item> 
+  </ion-list>
+
+
+ 
+</ion-content>

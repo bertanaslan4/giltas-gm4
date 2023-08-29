@@ -1,0 +1,682 @@
+<ion-header>
+    <ion-toolbar color="gmheader">
+        <ion-title>{{ 'CUSTOMER_TITLE_TEXT' | translate }}</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button slot="icon-only" (click)="onButtonClick()">
+                <ion-icon [name]="buttonClicked ? 'folder-open' :'chatbubbles'"></ion-icon>
+            </ion-button>
+            <ion-toggle enabled checked="false" [(ngModel)]="editMode" *ngIf="!buttonClicked"></ion-toggle>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <!--Müşteri Bilgileri Başlangıç-->
+    <div *ngIf="!buttonClicked">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-img [src]="imageURL" *ngIf="!checkimage" style="height: 200px;"></ion-img>
+                    <ion-img [src]="base64Image" *ngIf="checkimage" style="height: 200px;"></ion-img>
+                    <ion-button expand="block" *ngIf="editMode" (click)="takePicture()">
+                        <ion-icon name="camera" slot="start"></ion-icon> {{'TAKE_PHOTO_TEXT' | translate}}
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon ios="ios-person" md="md-person" slot="start"></ion-icon>
+                        <ion-label>{{'CUSTOMER_INFORMATION' | translate}} </ion-label>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_FIRSTNAME_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" [(ngModel)]="customerModel.FirstName">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_LASTNAME_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" [(ngModel)]="customerModel.LastName">
+                        </ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item>
+                        <ion-label><b
+                                style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_IDENTITY_NUMBER_LABEL_TEXT' | translate }}
+                        </ion-label>
+                        <ion-input type="number" inputmode="numeric" pattern="[0-9]*" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="customerModel.IdentityNum" (keydown)="maxLength($event, 'IdentityNum', 11)"
+                            onselectstart="return false" onpaste="return false;" id="IdentityNum" onCopy="return false"
+                            (ionChange)="oninput($event)" onCut="return false" onDrag="return false"
+                            onDrop="return false" autocomplete=off required></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item *ngIf="currencyCheck">
+                        <ion-label>{{'SETTINGS_SETTINGS_G3_CURRENCY_LABEL_TEXT' |translate}} </ion-label>
+                        <ion-input type="text" [disabled]="!editMode" [(ngModel)]="customerModel.CurrencyCode">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item *ngIf="!currencyCheck">
+                        <ion-label>{{'SETTINGS_SETTINGS_G3_CURRENCY_LABEL_TEXT' |translate}}</ion-label>
+                        <ion-select [(ngModel)]="customerModel.CurrencyCode" multiple="false" (ionChange)="optionsFn()">
+                            <ion-select-option *ngFor="let item of curPlans" value="{{item.val}}">
+                                {{item.name}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="taxOffices.length>0">
+                <ion-col>
+                    <ion-label>{{ 'CUSTOMER_CUSTOMER_TAX_OFFICE_CODE_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-select [disabled]="!editMode || !newMode" [(ngModel)]="customerModel.TaxOfficeCode">
+                        <ion-item *ngIf="tempTaxCheck">
+                            <ion-select-option *ngFor="let taxOffice of taxOfficesTemp"
+                                value="{{taxOffice.TaxOfficeCode}}">
+                                {{taxOffice.TaxOfficeDescription}}
+                            </ion-select-option>
+                        </ion-item>
+                        <ion-item *ngIf="!tempTaxCheck">
+                            <!---->
+                            <ion-select-option *ngFor="let taxOffice of taxOffices" value="{{taxOffice.TaxOfficeCode}}">
+                                {{taxOffice.TaxOfficeDescription}}
+                            </ion-select-option>
+                        </ion-item>
+                    </ion-select>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="taxOffices.length > 0">
+                <ion-col>
+                    <ion-label>
+                        {{ 'CUSTOMER_CUSTOMER_TAX_NUMBER_LABEL_TEXT' | translate }}</ion-label>
+                    <ion-input type="number" inputmode="numeric" pattern="[0-9]*" onselectstart="return false"
+                        onpaste="return false;" id="TaxNumber" onCopy="return false" onCut="return false"
+                        onDrag="return false" onDrop="return false" autocomplete=off placeholder=""
+                        [disabled]="!editMode || !newMode" [(ngModel)]="customerModel.TaxNumber"
+                        (keydown)="maxLength($event, 'TaxNumber', 10)">
+
+                    </ion-input>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!--Müşteri Bilgileri Bitiş-->
+        <!--Müşteri İletişim Başlangıç-->
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon ios="ios-person" md="md-call" slot="start"></ion-icon>&nbsp;&nbsp;
+                        <ion-label> {{ 'CUSTOMER_CUSTOMER_CONTACT_INFORMATIONS_DIVIDER_TITLE_TEXT' | translate }}
+                        </ion-label>
+                        <ion-button slot="end" *ngIf="editMode" color="light" (click)="addCommAddress()">
+                            <ion-icon name="add"></ion-icon>
+                        </ion-button>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" *ngFor="let detail of customerModel.Communications">
+                    <ion-item *ngIf="detail.CommunicationTypeCode == 1">
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_PHONE_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="tel" [disabled]="!editMode" placeholder="902324444444"
+                            [brmasker]="{mask:'000000000000', len:12}" [(ngModel)]="detail.CommAddress"></ion-input>
+                    </ion-item>
+                    <ion-item *ngIf="detail.CommunicationTypeCode == 2">
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_FAX_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="tel" [disabled]="!editMode" placeholder="902324444444"
+                            [brmasker]="{mask:'000000000000', len:12}" [(ngModel)]="detail.CommAddress"></ion-input>
+                    </ion-item>
+                    <ion-item *ngIf="detail.CommunicationTypeCode == 3">
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_EMAIL_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="e-mail" [disabled]="!editMode" [(ngModel)]="detail.CommAddress"></ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="detail.CommunicationTypeCode == 7">
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_CONTACT_CELLPHONE_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-input type="tel" [disabled]="!editMode" [brmasker]="{mask:'905554444444', len:12}"
+                            [(ngModel)]="detail.CommAddress"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!--Müşteri İletişim Bitiş-->
+        <!--Adres Bilgileri Başlangıç-->
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon ios="ios-person" md="md-home" slot="start"></ion-icon>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_INFORMATIONS_DIVIDER_TITLE_TEXT' | translate }}<b
+                                style="color: red;">&nbsp;*</b></ion-label>
+                        <ion-button (click)="addPostalAddresses()" slot="end" *ngIf="editMode" color="light">
+                            <ion-icon name="add"></ion-icon>
+                        </ion-button>
+
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row class="address-style" *ngFor="let detail of customerModel.PostalAddresses, let i = index ;">
+
+                <ion-col>
+
+
+                    <ion-item>
+                        <ion-label><b style="color: red;">*&nbsp;</b>{{'ADDRESS_DETAIL' | translate}}</ion-label>
+                        <ion-select [(ngModel)]="detail.AddressTypeCode" [disabled]="!editMode">
+                            <ion-select-option *ngFor="let item of addressDescriptions" disabled="{{item.Code==4}}"
+                                value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+
+
+                    <ion-item>
+                        <ion-label>{{'OPEN_ADDRESS' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode" [(ngModel)]="detail.Address"></ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="!editMode && !newMode">
+                        <ion-label><b
+                                style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_COUNTRY_CODE_LABEL_TEXT' | translate }}
+                        </ion-label>
+                        <ion-input type="text" [disabled]="true" [(ngModel)]="detail.CountryDescription"></ion-input>
+                    </ion-item>
+                    <ion-item *ngIf="editMode || newMode">
+                        <ion-label><b
+                                style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_COUNTRY_CODE_LABEL_TEXT' | translate }}
+                        </ion-label>
+                        <ion-select multiple="false" [(ngModel)]="detail.CountryCode" (ionChange)="onCountryChange()">
+                            <ion-select-option *ngFor="let item of countryList[i]" value="{{item.Code}}">
+                                {{item.Description}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-list *ngIf="detail.CountryCode == 'TR'">
+                        <!-- Bölge Edit Mode-->
+                        <ion-item *ngIf="!editMode && !newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STATE_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true" [(ngModel)]="detail.StateDescription"></ion-input>
+                        </ion-item>
+
+                        <ion-item *ngIf="editMode || newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STATE_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-select multiple="false" [(ngModel)]="detail.StateCode" (ionChange)="onStateChange()">
+                                <ion-select-option *ngFor="let item of stateList[i]" [value]="item.Code">
+                                    {{item.Description}}
+                                </ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <!-- İl Edit Mode-->
+                        <ion-item *ngIf="!editMode && !newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_CITY_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true" [(ngModel)]="detail.CityDescription"></ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="editMode || newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_CITY_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-select [(ngModel)]="detail.CityCode" multiple="false" (ionChange)="onCityChange()">
+                                <ion-select-option *ngFor="let item of cityList[i]" value="{{item.Code}}">
+                                    {{item.Description}}
+                                </ion-select-option>
+                            </ion-select>
+                        </ion-item>
+
+                        <!-- İlçe Edit Mode-->
+                        <ion-item *ngIf="!editMode && !newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_DISTRICT_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true" [(ngModel)]="detail.DistrictDescription">
+                            </ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="editMode || newMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_DISTRICT_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-select [(ngModel)]="detail.DistrictCode" multiple="false">
+                                <ion-select-option *ngFor="let item of districtList[i]" value="{{item.Code}}">
+                                    {{item.Description}}
+                                </ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <!-- Edit Mode End-->
+
+
+                        <ion-item>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_NEIGHBORHOOD_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-input type="text" [disabled]="!editMode" [(ngModel)]="detail.QuarterName">
+                            </ion-input>
+                        </ion-item>
+
+                        <ion-item *ngIf="editMode || newMode">
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STREET_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-input type="text" [disabled]="false" [(ngModel)]="detail.StreetName">
+                            </ion-input>
+                        </ion-item>
+
+                        <ion-item *ngIf="!editMode && !newMode">
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STREET_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-input type="text" [disabled]="true" [(ngModel)]="detail.Street">
+                            </ion-input>
+                        </ion-item>
+
+
+                        <ion-item>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_BUILDING_NAME_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="!editMode" [(ngModel)]="detail.BuildingNum"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_FLOOR_NUMBER_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-input type="text" [disabled]="!editMode " [(ngModel)]="detail.FloorNum"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_ADDRESS_DOOR_NUMBER_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-input type="text" [disabled]="!editMode " [(ngModel)]="detail.DoorNum"></ion-input>
+                        </ion-item>
+                    </ion-list>
+
+                    <ion-list *ngIf="detail.CountryCode != 'TR'">
+                        <!-- Bölge Edit Mode-->
+                        <ion-item *ngIf="!editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STATE_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+
+                        <ion-item *ngIf="editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_STATE_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+                        <!-- İl Edit Mode-->
+                        <ion-item *ngIf="!editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_CITY_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_CITY_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+
+                        <!-- İlçe Edit Mode-->
+                        <ion-item *ngIf="!editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_DISTRICT_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="editMode">
+                            <ion-label><b
+                                    style="color: red;">*&nbsp;</b>{{ 'CUSTOMER_CUSTOMER_ADDRESS_DISTRICT_CODE_LABEL_TEXT' | translate }}
+                            </ion-label>
+                            <ion-input type="text" [disabled]="true">--</ion-input>
+                        </ion-item>
+                        <!-- Edit Mode End-->
+                    </ion-list>
+
+
+
+
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!--Adress Bilgileri Bitiş-->
+        <!-- personnel information Start -->
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon ios="ios-person" md="md-person" slot="start"></ion-icon>
+                        <ion-label> {{'PERSONEL_INFORMATION' | translate}} </ion-label>
+                        <ion-button slot="end" *ngIf="editMode && !personelInfo"
+                            (click)="presentPersonalInfoAlertRadio()" color="light">
+                            <ion-icon name="add"></ion-icon>
+                        </ion-button>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row *ngIf="personelInfo">
+                <ion-col>
+                    <ion-item *ngIf="!newMode">
+                        <ion-label><b>*</b> {{'PLACE_OF_BIRTH' | translate}} </ion-label>
+                        <ion-input type="text" [disabled]="true" [(ngModel)]="personelInfo.BirthPlace">
+                        </ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="newMode">
+                        <ion-label><b>*</b> {{'PLACE_OF_BIRTH' | translate}} </ion-label>
+                        <ion-input type="text" [(ngModel)]="personelInfo.BirthPlace">
+                        </ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="!newMode">
+                        <ion-label><b>*</b>{{'DATE_OF_BIRTH' | translate}}</ion-label>
+                        <ion-datetime class="date" min="1935" displayFormat="DD.MM.YYYY" [disabled]="true"
+                            pickerFormat="DD MM YYYY" [(ngModel)]="personelInfo.BirthDate">
+                        </ion-datetime>
+                    </ion-item>
+
+                    <ion-item *ngIf="newMode">
+                        <ion-label><b>*</b>{{'DATE_OF_BIRTH' | translate}}</ion-label>
+                        <ion-datetime class="date" min="1935" displayFormat="DD.MM.YYYY" pickerFormat="DD MM YYYY"
+                            [(ngModel)]="personelInfo.BirthDate">
+                        </ion-datetime>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label><b>*</b>{{'GENDER_TEXT' | translate}}</ion-label>
+                        <ion-select [disabled]="!editMode || !newMode" [(ngModel)]="personelInfo.GenderCode">
+                            <ion-select-option *ngFor="let item of genderCode" value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item *ngIf="personelInfo.GenderCode == '2'">
+                        <ion-label>{{'FAMILY_NAME_BEFORE_MARRAGE' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" [(ngModel)]="personelInfo.MaidenName">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'MOTHER_NAME' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" [(ngModel)]="personelInfo.MotherName">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'FATHER_NAME' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" [(ngModel)]="personelInfo.FatherName">
+                        </ion-input>
+                    </ion-item>
+
+                    <!-- Montly Income -->
+                    <ion-item *ngIf="!editMode">
+                        <ion-label>{{'SALARY_PER_MONTH' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="true" [(ngModel)]="personelInfo.MonthlyIncome"></ion-input>
+                    </ion-item>
+
+
+                    <ion-item *ngIf="editMode">
+                        <ion-label>{{'SALARY_PER_MONTH' | translate}}</ion-label>
+                        <ion-select [(ngModel)]="personelInfo.MonthlyIncome">
+                            <ion-select-option *ngFor="let item of monthlyIncome" value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'DRIVING_LICENSE_TYPE' | translate}}</ion-label>
+                        <ion-select [disabled]="!editMode || !newMode" [(ngModel)]="personelInfo.DrivingLicenceType">
+                            <ion-select-option *ngFor="let item of drivingLicenceType" value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'DRIVING_LICENSE_NO' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'IDENTITY_CARD_NO' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.IdentityCardNum"> </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'PROVINCE_CODE_REG_POP' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" placeholder="TR.35"
+                            [(ngModel)]="personelInfo.RegisteredCityCode"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'DISTRICT_CODE_REG_POP' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode" placeholder="TR.03502"
+                            [(ngModel)]="personelInfo.RegisteredDistrictCode"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'VILLAGE_REG_POP' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.RegisteredTown">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'REGISTERED_SEQUENCE_NUMBER' | translate}}.</ion-label>
+                        <ion-input type="number" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.RegisteredNum">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'REGISTER_NUMBER' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.RegisteredRecordNum">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label> {{'REGISTERED_FAMILY_SEQ_NO' | translate}} </ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.RegisteredFamilyNum">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'REGISTERED_VOLUME_NO' | translate}}</ion-label>
+                        <ion-input type="text" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.RegisteredFileNum">
+                        </ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'ENSURENCE_NO' | translate}}.</ion-label>
+                        <ion-input type="number" [disabled]="!editMode || !newMode"
+                            [(ngModel)]="personelInfo.SocialInsuranceNumber"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!--Personnel Information End-->
+        <!-- Müşteri Sınıfı START -->
+        <!-- Guarantor Start -->
+        <ion-grid *ngIf="!newMode">
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon name="people" slot="start"></ion-icon>
+                        <ion-label> {{ 'GUARANTORS_TITLE_TEXT' | translate }} </ion-label>
+                        <ion-button slot="end" color="light" *ngIf="editMode" (click)="addGuarantor()">
+                            <ion-icon name="add"></ion-icon>
+                        </ion-button>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col *ngIf="guarantors">
+                    <ion-item *ngFor="let item of guarantors">
+                        <ion-label>{{item.FirstName + ' ' +item.LastName}}</ion-label>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <!-- Guarantor End -->
+        <!--Müşteri Özellikleri-->
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light">
+                        <ion-icon name="apps" slot="start"></ion-icon>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_ATTRIBUTES_DIVIDER_TITLE_TEXT' | translate }}</ion-label>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item>
+                        <ion-label>{{'SEATING_TIME' | translate}}</ion-label>
+                        <ion-select [disabled]="!editMode" [(ngModel)]="AttributeCode13">
+                            <ion-select-option *ngFor="let item of customerAttributeDesc13" value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>{{'PROPERTY_STATUS_TEXT' | translate}}</ion-label>
+                        <ion-select [disabled]="!editMode" [(ngModel)]="AttributeCode14">
+                            <ion-select-option *ngFor="let item of customerAttributeDesc14" value="{{item.Code}}">
+                                {{item.Value}}
+                            </ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item (click)="editMode && clickJobStuation()">
+                        <ion-label>{{'WORK_CONDITION_TEXT' | translate}}</ion-label>
+                        <ion-label> {{AttDesc17}} </ion-label>
+                    </ion-item>
+
+                    <ion-list *ngIf="!editMode">
+                        <ion-item *ngFor="let att of attributes">
+                            <ion-label> {{att.AttributeTypeDescription}} </ion-label>
+                            <ion-label> {{att.AttributeDescription}}</ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+        <ion-grid *ngIf="!editMode">
+            <ion-row>
+                <ion-col>
+                    <ion-item-divider color="light"
+                        *ngIf="serverService.Settings.V3Settings.SalesType==1||serverService.Settings.V3Settings.SalesType==2">
+                        <ion-icon name="document" slot="start"></ion-icon>
+                        <ion-label> {{ 'CUSTOMER_CUSTOMER_CREDIT-DEBT_INFORMATION_DIVIDER_TITLE_TEXT' | translate }}
+                        </ion-label>
+                    </ion-item-divider>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col *ngFor="let debit of customerDebit">
+                    <ion-item>
+                        <ion-label>Döviz Tipi</ion-label>
+                        <ion-label> {{debit.DovizTipi}}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                        <ion-label> {{ 'CUSTOMER_CUSTOMER_LOCAL_CREDIT_LABEL_TEXT' | translate }} </ion-label>
+                        <ion-label> {{debit.TLAlacak}} </ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_LOCAL_DEBT_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-label>{{debit.TLBorc}}</ion-label>
+                    </ion-item>
+                    <ion-item>
+                        <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                        <ion-label>{{ 'CUSTOMER_CUSTOMER_LOCAL_BALANCE_LABEL_TEXT' | translate }}</ion-label>
+                        <ion-label> {{debit.TLBakiye}}</ion-label>
+                    </ion-item>
+                    <ion-item *ngFor="let overduepay of overduePayment">
+                        <ion-icon name="ios-notifications-outline" item-start small></ion-icon>
+                        <ion-label>Gecikmiş Ödeme</ion-label>
+                        <ion-label>{{overduepay.RemainingInstallment}}</ion-label>
+                    </ion-item>
+                    <ion-list *ngIf="serverService.Settings?.V3Settings.IsExchange == true">
+                        <ion-item>
+                            <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_FOREIGN_CREDIT_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-label> {{debit.DovizAlacak}} </ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_FOREIGN_DEBT_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-label> {{debit.DovizBorc}}</ion-label>
+                        </ion-item>
+                        <ion-item>
+                            <ion-icon name="ios-alert-outline" item-start small></ion-icon>
+                            <ion-label>{{ 'CUSTOMER_CUSTOMER_FOREIGN_BALANCE_LABEL_TEXT' | translate }}</ion-label>
+                            <ion-label> {{debit.DovizBakiye}}</ion-label>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-row>
+            <ion-col>
+                <!--customerExtra-->
+                <ion-button expand="full" (click)="gotoExtras()"
+                    *ngIf="serverService.Settings.V3Settings.SalesType == 0 || serverService.Settings.V3Settings.SalesType == 3 || !editMode">
+                    {{'CUSTOMER_CUSTOMER_STATEMENT_INFORMATION_DIVIDER_TITLE_TEXT' | translate }}
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
+    <ion-grid *ngIf="buttonClicked">
+        <ion-row>
+            <ion-col>
+                <ion-item-divider color="light">
+                    <ion-icon name="person" slot="start"></ion-icon>
+                    <ion-label>Kullanıcı Uyarıları</ion-label>
+                </ion-item-divider>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+
+                <ion-item *ngFor="let custoinfo of customerInformation">
+                    <ion-label>
+                        <p>Uyarılar :</p>
+                        <p style="color: red;">
+                            {{custoinfo.Information}}
+                        </p>
+                    </ion-label>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-item-divider color="light">
+                    <ion-icon name="person" slot="start"></ion-icon>
+                    <ion-label>Kullanıcı Notları</ion-label>
+                </ion-item-divider>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-item *ngFor="let custoinfo of customerWarning">
+                    <ion-label>
+                        <p>Notlar :</p>
+                        <p style="color: red;"> {{custoinfo.LineDescription}} </p>
+                    </ion-label>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-button color="primary" expand="full" [disabled]="!editMode" (click)="addCustomer()">
+            {{ 'SAVE_BUTTON_TEXT' | translate }} </ion-button>
+    </ion-toolbar>
+</ion-footer>

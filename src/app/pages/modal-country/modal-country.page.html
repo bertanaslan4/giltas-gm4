@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-header>
+    <ion-toolbar color="gmheader">
+      <ion-title>Modal</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content>
+  <ion-searchbar [(ngModel)]="myInput" [showCancelButton]="true"
+cancelButtonText="{{'ALERT_BUTTON_CANCEL_TEXT' | translate}}" (ionInput)="onInput($event)"
+  (ionCancel)="onCancel()" (keydown.enter)="onInput($event)"></ion-searchbar>
+   <ion-list>
+     <ion-item *ngFor="let item of countryListTmp" (click)="selectCountry(item)">   
+        <ion-label>{{item.Description}}</ion-label>
+    </ion-item>
+   </ion-list>
+</ion-content>

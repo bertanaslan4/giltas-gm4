@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'OTHER_STORES_INVENTORY_TITLE' | translate}} </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulion-labelref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-row id="headerStyle" class="headerStyle">
+      <ion-col size="3"><b>{{'INVENTORY_STORE_TEXT' | translate}}</b></ion-col> 
+      <ion-col size="3"><b>{{'COLOR_OR_BODY_SIZE' | translate}}</b></ion-col>
+      <ion-col size="3"><b>{{'INVENTORY_TEXT' | translate}}</b></ion-col> 
+      <ion-col size="3"><b>{{'ACTION_TEXT' | translate}}</b></ion-col> 
+</ion-row> 
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid padding>  
+    <div *ngFor="let item of productOtherStore; let i = index">
+      <div *ngIf="item.OfficeCode != serverService.Settings.V3Settings.OfficeCode && item.StoreCode != serverService.Settings.V3Settings.StoreCode">
+      <ion-row class="allreports-table-row" *ngIf="item.Inventory > 0 " [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}">
+        <ion-col class="allreports-table-col" size="3">
+          <ion-label>{{item.WarehouseDescription}}</ion-label>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="3">
+          <ion-label>({{item.ColorCode}}) / {{item.ItemDim1Code}}</ion-label>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="3">
+          <ion-label *ngIf="item.Inventory <= 0" style="color: red;"> {{item.Inventory}} </ion-label>
+          <ion-label *ngIf="item.Inventory > 0"> {{item.Inventory}}</ion-label>
+        </ion-col>
+        <ion-col class="allreports-table-col" size="3">
+          <button ion-button small (click)="presentAlert(item)" >{{'DEMAND_TEXT' | translate}}</button>
+        </ion-col>
+      </ion-row>      
+    </div>
+  </div>
+  </ion-grid>
+</ion-content>

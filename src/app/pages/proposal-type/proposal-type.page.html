@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>Sipariş Kategori Tipi Seçiniz</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-radio-group [(ngModel)]="changesaletype">
+    <ion-item *ngIf="SaleTypeLicense0">
+      <ion-label>Toptan Satış</ion-label>
+      <ion-radio (click)="goToProposalPage()" value="1"></ion-radio>
+    </ion-item>  
+    <ion-item *ngIf="SaleTypeLicense1">
+      <ion-label>Perakende Satış</ion-label>
+      <ion-radio (click)="goToProposalPage()" value="2"></ion-radio>
+    </ion-item>
+    <ion-item *ngIf="SaleTypeLicense2">
+      <ion-label>Taksitli Satış</ion-label>
+      <ion-radio (click)="goToProposalPage()" value="3"></ion-radio>
+    </ion-item>
+    <ion-item *ngIf="SaleTypeLicense3">      
+        <ion-label>İhracat Satış</ion-label>
+        <ion-radio  (click)="goToProposalPage()"  value="4"></ion-radio>
+      </ion-item>
+    <ion-item *ngIf="SaleTypeLicense4">      
+      <ion-label>Peşin Satış (Hemen Teslim)</ion-label>
+      <ion-radio (click)="goToProposalPage()" value="5"></ion-radio>
+    </ion-item>
+    <ion-item *ngIf="SaleTypeLicense5">
+      <ion-label>Peşin Satış (Sonra Teslim)</ion-label>
+      <ion-radio (click)="goToProposalPage()" value="6"></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'ADD_ADDRESS_TITLE' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()"><ion-icon name="arrow-back"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <form #form="ngForm" method="post" (ngSubmit)="returnAddressData(form)">
+    <ion-item>
+      <ion-label> * {{'ADDRESS_DETAIL' | translate}}</ion-label>
+      <ion-select okText="{{ 'SELECT_OK_TEXT' | translate }}" cancelText="{{ 'SELECT_CANCEL_TEXT' | translate }}"
+        [(ngModel)]="detail_AddressTypeCode" name="detail_AddressTypeCode">
+        <ion-select-option *ngFor="let item of addressDescriptions" value="{{item.Code}}" disabled="{{item.Code == 4}}">
+          {{item.Value}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>{{'OPEN_ADDRESS' | translate}}</ion-label>
+      <ion-input type="text" ngModel name="detail_Address" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>* {{'CUSTOMER_CUSTOMER_ADDRESS_COUNTRY_CODE_LABEL_TEXT' | translate}}</ion-label>
+      <ionic-selectable [(ngModel)]="detail_world" name="detail_world" [items]="worldList"
+         (onChange)="onCountryChange($event)"
+        itemValueField="Code" itemTextField="Description" [canSearch]="true">
+      </ionic-selectable>
+    </ion-item>
+    <div *ngIf="detail_world == 'TR'">
+      <ion-item>
+        <ion-label>* {{'CUSTOMER_CUSTOMER_ADDRESS_STATE_CODE_LABEL_TEXT' | translate}}</ion-label>
+        <ionic-selectable [(ngModel)]="detail_StateCode" name="detail_StateCode" [items]="stateList"
+          itemValueField="Code" itemTextField="Description" [canSearch]="true" (onChange)="onStateChange($event)">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item>
+        <ion-label>* {{'CUSTOMER_CUSTOMER_ADDRESS_CITY_CODE_LABEL_TEXT' | translate}}</ion-label>
+        <ionic-selectable [(ngModel)]="detail_CityCode" name="detail_CityCode" [items]="cityList" itemValueField="Code"
+          itemTextField="Description" [canSearch]="true" (onChange)="onCityChange($event)">
+        </ionic-selectable>
+      </ion-item>
+      <ion-item>
+        <ion-label>* {{'CUSTOMER_CUSTOMER_ADDRESS_DISTRICT_CODE_LABEL_TEXT' | translate}}</ion-label>
+        <ionic-selectable [(ngModel)]="detail_DistrictCode" name="detail_DistrictCode" [items]="districtList"
+          itemValueField="Code" itemTextField="Description" [canSearch]="true" 
+          >
+        </ionic-selectable>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>{{'CUSTOMER_CUSTOMER_ADDRESS_NEIGHBORHOOD_LABEL_TEXT' | translate}} </ion-label>
+        <ion-input type="text" ngModel name="detail_QuarterName" > </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{'CUSTOMER_CUSTOMER_ADDRESS_STREET_LABEL_TEXT' | translate}} </ion-label>
+        <ion-input type="text" ngModel name="detail_StreetName" > </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>{{'CUSTOMER_CUSTOMER_ADDRESS_BUILDING_NAME_LABEL_TEXT' | translate}} </ion-label>
+        <ion-input type="number" ngModel name="detail_BuildingNum" [brmasker]="{mask:'0000', len:4}"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label> {{'CUSTOMER_CUSTOMER_ADDRESS_FLOOR_NUMBER_LABEL_TEXT' | translate}} </ion-label>
+        <ion-input type="number" ngModel name="detail_FloorNum" [brmasker]="{mask:'0000', len:4}"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label> {{'CUSTOMER_CUSTOMER_ADDRESS_DOOR_NUMBER_LABEL_TEXT' | translate}} </ion-label>
+        <ion-input type="number" ngModel name="detail_DoorNum" [brmasker]="{mask:'0000', len:4}"> </ion-input>
+      </ion-item>
+    </div>
+    <ion-button type="submit" expand="full" color="primary">{{'ADD_ADDRESS_BUTTONS' | translate}}</ion-button>
+  </form>
+</ion-content>

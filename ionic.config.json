@@ -1,0 +1,9 @@
+{
+  "name": "giltas_gm",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "cf2b45d6"
+}

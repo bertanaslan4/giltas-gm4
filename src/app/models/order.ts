@@ -1,0 +1,250 @@
+export class OrderOpticalProductLine {
+  Addition: number;
+  Axis: number;
+  BaseCurveRadius: number;
+  ContributionAmount: number;
+  CurrencyCode: string;
+  Cylinder: number;
+  DistanceReading: string;
+  EffectiveDiameter: number;
+  ExchangeRate: number;
+  LeftRightFrame: string;
+  OrderOpticalProductID: string;
+  OrderOpticalProductLineID: string;
+  Prism: number;
+  ProtocolNumber: string;
+  PupillaryDistance: number;
+  SegmentHeight: number;
+  Sphere: number;
+  UsePolished: boolean;
+}
+
+export class Line {
+  ActualPrice: number;
+  ActualPriceCurrencyCode: string;
+  ActualPriceExchangeRate: number;
+  Amount: number;
+  AmountVI: number;
+  BaseCustomerCode: string;
+  BaseCustomerTypeCode: number;
+  BaseOrderNumber: string;
+  BaseProcessCode: string;
+  BaseStoreCode: string;
+  BaseSubCurrAccID: string;
+  BatchCode: string;
+  ClosedDate: Date;
+  ColorCode: string;
+  CostCenterCode: string;
+  CurrencyCode: string;
+  DeliveryDate: Date;
+  DisableBeforeDoSave: boolean;
+  IsTaxIncludedPrice: boolean;
+  ITAtt01: string;
+  ITAtt02: string;
+  ITAtt03: string;
+  ITAtt04: string;
+  ITAtt05: string;
+  ItemCode: string;
+  ItemDim1Code: string;
+  ItemDim2Code: string;
+  ItemDim3Code: string;
+  ItemTypeCode: number;
+  LDiscount1: number;
+  LDiscount2: number;
+  LDiscount3: number;
+  LDiscount4: number;
+  LDiscount5: number;
+  LDiscountVI1: number;
+  LDiscountVI2: number;
+  LDiscountVI3: number;
+  LDiscountVI4: number;
+  LDiscountVI5: number;
+  LDisRate1: number;
+  LDisRate2: number;
+  LDisRate3: number;
+  LDisRate4: number;
+  LDisRate5: number;
+  LineAmount: number;
+  LineDescription: string;
+  LineID: string;
+  MinPrice: number;
+  MinPriceTaxIncluded: boolean;
+  NetAmount: number;
+  OrderCancelReasonCode: string;
+  OrderLineBOMID: number;
+  OrderLineSumID: number;
+  OrderOpticalProductLine: OrderOpticalProductLine;
+  OTAttChanged: boolean;
+  PaymentPlanCode: string;
+  PCTAmount: number;
+  PCTCode: string;
+  PCTRate: number;
+  PlannedDateOfLading: Date;
+  Price: number;
+  PriceListLineID: string;
+  PriceVI: number;
+  Qty1: number;
+  Qty2: number;
+  RelationCurrencyCode: string;
+  SalespersonCode: string;
+  SortOrder: number;
+  SupportRequestHeaderID: string;
+  SupportRequestNumber: string;
+  TaxBase: number;
+  TDiscount1: number;
+  TDiscount2: number;
+  TDiscount3: number;
+  TDiscount4: number;
+  TDiscount5: number;
+  TDiscountVI1: number;
+  TDiscountVI2: number;
+  TDiscountVI3: number;
+  TDiscountVI4: number;
+  TDiscountVI5: number;
+  UsedBarcode: string;
+  VatAmount: number;
+  VatCode: string;
+  VatDeducation: number;
+  VatRate: number;
+}
+
+export class OrderHeaderExtension {
+  InsuranceAgencyCode: string;
+  IsInstantReserve: boolean;
+}
+
+export class SendTime {
+  Ticks: number;
+  Days: number;
+  Hours: number;
+  Milliseconds: number;
+  Minutes: number;
+  Seconds: number;
+  TotalDays: number;
+  TotalHours: number;
+  TotalMilliseconds: number;
+  TotalMinutes: number;
+  TotalSeconds: number;
+}
+
+export class OrdersViaInternetInfo {
+  PaymentAgent: string;
+  PaymentDate: Date;
+  PaymentTypeCode: number;
+  PaymentTypeDescription: string;
+  SalesURL: string;
+  SendDate: Date;
+  SendTime: SendTime;
+}
+
+export class OrderTime {
+  Ticks: number;
+  Days: number;
+  Hours: number;
+  Milliseconds: number;
+  Minutes: number;
+  Seconds: number;
+  TotalDays: number;
+  TotalHours: number;
+  TotalMilliseconds: number;
+  TotalMinutes: number;
+  TotalSeconds: number;
+}
+
+export class PostalAddress {
+  Address: string;
+  AddressID: number;
+  BuildingName: string;
+  BuildingNum: string;
+  CityCode: string;
+  CompanyName: string;
+  CountryCode: string;
+  DistrictCode: string;
+  DoorNum: number;
+  FirstName: string;
+  FloorNum: number;
+  IdentityNum: string;
+  LastName: string;
+  QuarterCode: number;
+  QuarterName: string;
+  SiteName: string;
+  StateCode: string;
+  StreetCode: number;
+  StreetName: string;
+  TaxNumber: string;
+  TaxOfficeCode: string;
+  ZipCode: string;
+  Street: string;
+}
+
+export class Order {
+
+  ModelType: number;
+  AllowValidateEmptyPrice: boolean;
+  ApplicationCode: string;
+  ApplicationID: string;
+  AutoGenerateUniqueNumber: boolean;
+  AverageDueDate: Date;
+  BillingPostalAddressID: string;
+  BlockCheckOutProcess: boolean;
+  CompanyCode: number;
+  ContactID: string;
+  CreditableConfirmedDate: Date;
+  CreditableConfirmedUser: string;
+  CustomerCode: string;
+  DeliveryCompanyCode: string;
+  Description: string;
+  DiscountReasonCode: number;
+  DocCurrencyCode: string;
+  DocumentNumber: string;
+  DOVCode: string;
+  ExchangeRate: number;
+  ExchangeTypeCode: number;
+  ExportFileNumber: string;
+  GLTypeCode: string;
+  GuarantorContactID: string;
+  GuarantorContactID2: string;
+  HeaderID: string;
+  ImportFileNumber: string;
+  InternalDescription: string;
+  IsCompleted: boolean;
+  IsCreditableConfirmed: boolean;
+  IsCreditSale: boolean;
+  IsInstantForOpenOrder: boolean;
+  IsLocked: boolean;
+  IsPrinted: boolean;
+  IsProposalBased: boolean;
+  IsSalesViaInternet: boolean;
+  IsSuspended: boolean;
+  IsTaxIncluded: boolean;
+  ItemBalanceProcessFlowCode: number;
+  Lines: Line[];
+  LocalCurrencyCode: string;
+  OfficeCode: string;
+  OrderDate: Date;
+  OrderHeaderExtension: OrderHeaderExtension;
+  OrderNumber: string;
+  OrdersViaInternetInfo: OrdersViaInternetInfo;
+  OrderTime: OrderTime;
+  PaymentPlanCode: string;
+  PaymentTerm: number;
+  PostalAddress: PostalAddress;
+  POSTerminalID: number;
+  RoundsmanCode: string;
+  ShipmentMethodCode: string;
+  ShippingPostalAddressID: string;
+  StoreCode: string;
+  StoreWarehouseCode: string;
+  SuppressItemDiscount: boolean;
+  SurplusOrderQtyToleranceRate: number;
+  TaxExemptionCode: number;
+  TaxTypeCode: number;
+  TDisRate1: number;
+  TDisRate2: number;
+  TDisRate3: number;
+  TDisRate4: number;
+  TDisRate5: number;
+  UserLocked: boolean;
+  WarehouseCode: string;
+  WithHoldingTaxTypeCode: string;
+}

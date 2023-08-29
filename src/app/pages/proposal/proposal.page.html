@@ -1,0 +1,240 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title> {{'PRODUCT_ORDER_TEXT' | translate}} <ion-icon class="head-icon" name="cart"></ion-icon>
+    </ion-title>
+    <ion-buttons slot="start" *ngIf="pageRoute == '/tabs/proposal'">
+      <ion-back-button routerLink="/tabs/home" routerDirection="root"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="clearItems()" *ngIf="serverService.Items.length>0">
+        <ion-icon name="trash" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="selectProduct()">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="orderProcessActionSheet()">
+        <ion-icon name="md-more" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-grid>
+    <ion-row class="ion-text-center" style="display: block">
+      <ion-col size="auto" class="ion-text-center">
+        <ion-select [(ngModel)]="this.currentSalesType" (ionChange)="clearall(this.currentSalesType)"  placeholder="Satış Tipi Seçiniz">
+          <ion-select-option *ngFor="let types of selectSalesType" value="{{this.types.TypeCode}}" >
+              {{this.types.TypeName}}
+          </ion-select-option>
+        </ion-select>
+
+        <!-- <ion-button icon-start size="small" (click)="selectProposalType()" (ionChange)="clearCustomer()">
+          <ion-icon class="pr-5" name="bookmark"></ion-icon>
+          {{orderTypeName}}
+        </ion-button> -->
+      </ion-col>
+      <ion-col size="auto" class="ion-text-center">
+        <ion-button icon-end size="small" (click)="selectCustomerBtn()">
+          {{CustomerNameRececipt}}
+          <!-- <span class="pl-5" *ngIf="serverService.Settings.Integrator.DatabaseName == 'YALISPOR_V3'">
+            {{customerMoneyPoint}}
+          </span> -->
+          <ion-icon class="pl-5" name="person"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content #scrollArea [scrollEvents]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item-sliding *ngFor="let product of serverService.Items; let i = index ;" #slidingItem>
+            <ion-item>
+              <ion-thumbnail *ngIf="serverService.Settings.V3Settings.IsProductPhotos" slot="start">
+                <ion-img
+                  [src]="serverService.Settings.G3Settings.ImageUrl + '/Home/GetThumb?itemcode=' + product.ItemCode">
+                </ion-img>
+              </ion-thumbnail>
+              <ion-label class="items-left-label">
+                <h4><b> {{'SELECT-PRODUCT_PRODUCT_CODE_TEXT' | translate}} </b>: {{product.ItemCode}}</h4>
+                <h4 *ngIf="serverService.Settings.V3Settings.SalesType == 4 && product.UseSerialNumber == true">
+                  <b> {{'SERIAL_NUMBER' | translate}} </b>: {{product.seriNumber}}</h4>
+                <h4><b>Ürün Adı</b>: {{product.ItemDescription}}</h4>
+                <!--<h4 *ngIf="product.MaxQty"><b>Merkez Depoda</b>: {{product.MaxQty}} Adet</h4> -->
+                <h4><b>Eklenen</b>: {{product.Qty1}} {{product.MesureCodeDesc1}}</h4>
+                <p *ngIf="serverService.getColorDescription(product.ColorCode)">
+                  [{{serverService.getColorDescription(product.ColorCode)}}]</p>
+                <p *ngIf="product.ItemDim1Code">[{{product.ItemDim1Code}}]</p>
+                <!-- İSKONTO START - BU ISKONTO HESAPLARINI TS DOSYASINA ALMAK İYİ OLACAK -->
+                <h3 [ngStyle]="orderData.TDisRate1>0 ? {'text-decoration':'line-through'} : {'text-decoration':'none'}"
+                  style="color: red;" *ngIf="product.LDisRate1>0">
+                  {{'ORDER-DETAIL_DISCOUNT_RATE_TEXT:' | translate}}
+                  [%{{product.LDisRate1 | number}}] -{{product.LDisRate1*product.Price/100 | number}}
+                  {{getPriceGroup(currentPlanCode)}}
+                </h3>
+                <h3 style="color: red;" *ngIf="orderData.TDisRate1>0">
+                  İskonto :
+                  [%{{product.LDisRate1 | number}} + %{{orderData.TDisRate1 | number}}]
+                  -{{((product.LDisRate1*product.Price/100) + (product.Price  - (product.LDisRate1*product.Price/100)) * orderData.TDisRate1 / 100) | number}}
+                  {{getPriceGroup(currentPlanCode)}}
+                </h3>
+                <!-- İSKONTO END -->
+              </ion-label>
+
+              <ion-label class="items-right-label">
+                <!-- PRICE START - BU PRICE HESAPLARINI TS DOSYASINA ALMAK İYİ OLACAK-->
+                <p *ngIf="product.Price == 1" class="product-price"><strong>Ö.P. Gir</strong></p>
+                <p [ngStyle]="product.LDisRate1>0 ? {'text-decoration':'line-through'} : {'text-decoration':'none'}"
+                  *ngIf="product.Price != 1" class="product-price"><strong>{{product.Price}}
+                    <span *ngIf="serverService.Items.length > 0">{{getPriceGroup(currentPlanCode)}}</span>
+                  </strong>
+                </p>
+                <p [ngStyle]="orderData.TDisRate1>0 ? {'text-decoration':'line-through'} : {'text-decoration':'none'}"
+                  style="color: red;" class="product-price" *ngIf="product.LDisRate1>0">
+                  {{product.Price - product.LDisRate1*product.Price/100 | number}}
+                  {{getPriceGroup(currentPlanCode)}}
+                </p>
+                <p style="color: red;" class="product-price" *ngIf="orderData.TDisRate1>0">
+                  {{(product.Price - product.LDisRate1*product.Price/100) - ((product.Price  - (product.LDisRate1*product.Price/100)) * orderData.TDisRate1 / 100) | number}}
+                  {{getPriceGroup(currentPlanCode)}}
+                </p>
+                <!-- PRICE END -->
+                <!-- QTY SET START-->
+                <p class="quantity">
+                  <ion-icon class="add-icon" name="add" (click)="increasedecreaseNumber(i, 1)"></ion-icon>
+                  <ion-icon class="remove-icon" name="remove" (click)="increasedecreaseNumber(i, 2)"></ion-icon>
+                </p>
+                <!-- <p *ngIf="product.MesureCode != 'AD'" class="quantity">
+                  <ion-icon name="create" (tap)="setQuantity(i)"></ion-icon>
+                </p> -->
+                <!-- QTY SET END -->
+              </ion-label>
+            </ion-item>
+            <!-- SLIDING OPTIONS START -->
+            <ion-item-options side="end">
+              <!-- *ngIf="checkDatabase == 1"  -->
+              <!-- <ion-item-option class="slider-style" style="background: #a900ff7a;"
+                (click)="showPromptEditProduct(i,product, slidingItem)" color="black">
+                <ion-icon class="slider-icon" name="cash"></ion-icon>
+                <h6> {{'PROPOSAL_PROPOSAL_LIST_PRICE_TEXT' | translate}} </h6>
+              </ion-item-option> -->
+
+              <ion-item-option class="slider-style" style="background: #0014ff80;"
+                (click)="showPromptPaymentPlan(product, slidingItem)" color="black"
+                *ngIf="serverService.Settings.V3Settings.IsProductPriceByGrCode && serverService.Settings.V3Settings.SalesType == 2">
+                <ion-icon class="slider-icon" name="help"></ion-icon>
+                <h6>{{'PAYMENT_PLAN_TEXT' | translate}}</h6>
+              </ion-item-option>
+
+              <ion-item-option class="slider-style" style="background: #00e7ff6e"
+                (click)="showPromptSerialNumber(product, slidingItem)" color="black"
+                *ngIf="(serverService.Settings.V3Settings.SalesType == 4 || serverService.Settings.V3Settings.SalesType == 5) && product.UseSerialNumber == true">
+                <ion-icon class="slider-icon" name="finger-print"></ion-icon>
+                <h6> {{'SERIAL_NUMBER' | translate}} </h6>
+              </ion-item-option>
+
+              <ion-item-option class="slider-style" style="background: #27ff0073;"
+                (click)="showPromtBarcodeQty(product, slidingItem)" color="black">
+                <ion-icon class="slider-icon" name="keypad"></ion-icon>
+                <h6>{{'ORDER-DETAIL_QUANTITY_TEXT'| translate}} </h6>
+              </ion-item-option>
+
+              <ion-item-option class="slider-style" style="background: #ff00006e;" (click)="removeProduct(i)"
+                color="black">
+                <ion-icon class="slider-icon" name="trash"></ion-icon>
+                <h6> {{'ITEM_SLIDING_BUTTON_DELETE_TEXT' | translate}}</h6>
+              </ion-item-option>
+            </ion-item-options>
+            <!-- SLIDING OPTIONS END -->
+          </ion-item-sliding>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+
+  <ion-grid>
+    <ion-row class="footer-row">
+      <ion-col class="footer-col" *ngIf="serverService.Settings.V3Settings.SalesType == 2">
+        <ion-item>
+          <ion-label class="proposal-label">{{'PAYMENT_PLAN_TEXT' | translate}}</ion-label>
+          <ion-select multiple="false" okText="Tamam" cancelText="İptal" [(ngModel)]="currentPlanCode"
+            (ngModelChange)="onPlanChanged($event)">
+            <ion-select-option *ngIf="serverService.Settings.G3Settings.ShowPaymentPlans" value="">
+              {{'PROPOSAL_ADVANCE_TEXT' | translate}}
+            </ion-select-option>
+            <ion-select-option *ngFor="let plan of plans" value="{{plan.PaymentPlanCode}}">
+              {{plan.PaymentPlanDescription}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col class="footer-col" *ngIf="serverService.Settings.G3Settings.ShowTaxPlans">
+        <ion-item>
+          <ion-label class="proposal-label">{{'ORDER_TAX_TYPE' | translate}}</ion-label>
+          <ion-select [(ngModel)]="place" (ionChange)="optionsFn()" value="" multiple="false" okText="Tamam"
+            cancelText="İptal">
+            <ion-select-option *ngFor="let item of taxPlans" value="{{item.val}}">
+              {{item.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="footer-row">
+      <ion-col class="footer-col" *ngIf="serverService.Settings.V3Settings.SalesType == 2">
+        <ion-item>
+          <ion-label class="proposal-label"> {{'PROPOSAL_ADVANCE_PAYMENT_TEXT' | translate}} :</ion-label>
+          <ion-input type="number" [brmasker]="{mask:'0000000000', len:10}" placeholder="0 ₺"
+            onblur="this.placeholder = '0'" (oninput)="calculateRemain(paid)" [(ngModel)]="paid"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col class="footer-col">
+        <ion-item>
+          <ion-label class="proposal-label">{{'EXPLAINATION_TEXT' | translate}}:</ion-label>
+          <ion-input type="text" maxlength="40" placeholder="...." [(ngModel)]="infoText"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="footer-row">
+      <ion-col class="footer-col">
+        <ion-item>
+          <ion-label class="proposal-label">
+            <h2 class="proposal-label">Toplam: {{getTotal()}} {{getPriceGroup(currentPlanCode)}}</h2>
+            <h3 *ngIf="orderData.TDisRate1 > 0">Dip İskonto : [%{{this.orderData.TDisRate1}}]</h3>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col [ngStyle]="{'display':(paid>0) ? 'block' : 'none' }" class="footer-col">
+        <ion-item>
+          <ion-label class="proposal-label">
+            <h2 class="proposal-label">Kalan: {{serverService.Settings.G3Settings.Currency}} {{remain}} ₺</h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <ion-col
+        [ngStyle]="{'display':(serverService.Settings.V3Settings.SalesType == 2 && monthly>0) ? 'block' : 'none' }"
+        class="footer-col">
+        <ion-item>
+          <ion-label class="proposal-label">
+            <h2 class="proposal-label">
+              Taksit Tutarı: {{monthly}} {{serverService.Settings.G3Settings.Currency}}
+            </h2>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="footer-row">
+      <ion-col>
+        <ion-button [disabled]="!customer||(serverService.Items.length==0)" expand="full" size="medium"
+          (click)="makeOrder()">
+          {{ 'PROPOSAL_BUTTON_CREATE_ORDER_TEXT' | translate }}
+          <ion-icon class="pl-5" name="thumbs-up"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

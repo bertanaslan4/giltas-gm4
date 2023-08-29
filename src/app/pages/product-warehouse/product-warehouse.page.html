@@ -1,0 +1,75 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar color="gmheader">
+        <ion-title> {{'PRODUCT_WAREHOUSE_TEXT' | translate}} </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaulthref=""></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+    <!--  27.03.2020 de pasif edilmiştir.
+    <ion-row class="headerStyle"
+        *ngIf="ProductWarehouse && !serverService.Settings.G3Settings.UseInventoryInProductDetail"
+        style="border: 1px solid darkslategrey;">
+        <ion-col size="4"><b>{{'INVENTORY_STORE_TEXT' | translate}}</b></ion-col>
+        <ion-col size="4"><b>{{'COLOR_OR_BODY_SIZE' | translate}}</b></ion-col>
+        <ion-col size="4"><b>{{'INVENTORY_TEXT' | translate}}</b></ion-col>
+    </ion-row>
+    <ion-row class="headerStyle" *ngIf="color&&size && serverService.Settings.G3Settings.UseInventoryInProductDetail"
+        style="border: 1px solid darkslategrey;">
+        <ion-col size="4"><b>{{'COLOR_TEXT' | translate}} {{serverService.getColorDescription(color)}}</b></ion-col>
+        <ion-col size="4"><b>{{'INVENTORY_SIZE_TEXT' | translate}} </b> {{size}}</ion-col>
+        <ion-col size="4"><b>{{'INVENTORY_TEXT' | translate}}</b> {{realqty}} </ion-col>
+    </ion-row>
+
+    <ion-grid>
+        <ion-row class="allreports-table-row" [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}"
+            *ngFor="let item of ProductWarehouse; let i = index;">
+            <ion-col class="allreports-table-col" size="4">
+                <ion-label>{{item.WareHouseCode}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" size="4">
+                <ion-label>({{item.ColorCode}}) / {{item.ItemDim1Code}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" *ngIf="!(item.Inventory >=0)" size="4">
+                <ion-label style="color: red"> {{item.Inventory}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" *ngIf="item.Inventory >=0" size="4">
+                <ion-label> {{item.Inventory}}</ion-label>
+            </ion-col>
+        </ion-row>
+    </ion-grid> -->
+
+
+    <ion-row class="headerStyle"
+        *ngIf="ProductWarehouse"
+        style="border: 1px solid darkslategrey;">
+        <ion-col size="3"><b>{{'INVENTORY_STORE_TEXT' | translate}}</b></ion-col>
+        <ion-col size="5"><b>{{'COLOR_OR_BODY_SIZE' | translate}}</b></ion-col>
+        <ion-col size="4"><b>{{'INVENTORY_TEXT' | translate}}</b></ion-col>
+    </ion-row>
+    <ion-grid>
+        <ion-row class="allreports-table-row" [ngStyle]="{'background-color': i % 2 ==0 ? '#dbdbdb52' : '#ffffff'}"
+            *ngFor="let item of ProductWarehouse; let i = index;">
+            <ion-col class="allreports-table-col" size="3">
+                <ion-label>{{item.WarehouseDescription}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" size="5">
+                <ion-label>({{item.ColorDescription}}) / {{item.ItemDim1Code}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" *ngIf="!(item.Inventory >=0)" size="4">
+                <ion-label style="color: red"> {{item.AvailableInventoryQty1}}</ion-label>
+            </ion-col>
+            <ion-col class="allreports-table-col" *ngIf="item.Inventory >=0" size="4">
+                <ion-label> {{item.AvailableInventoryQty1}}</ion-label>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+
+</ion-content>

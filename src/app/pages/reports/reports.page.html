@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="gmheader">
+    <ion-title>{{'REPORTS_REPORT_TITLE' | translate}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button routerLink="/tabs/home" routerDirection="root"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item routerLink="customers" routerDirection="forward">
+      <ion-avatar slot="start">
+        <ion-img class="reports"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{'CUSTOMER_STATEMENT' | translate}}</h2>
+        <p> {{'CUSTOMER_ALL_RELATED_ACTION' | translate}} </p>
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="report-proposal" routerDirection="forward">
+      <ion-avatar slot="start">
+        <ion-img class="reports"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{'REPORT_ORDER_TXT' | translate}}</h2>
+        <p>{{'CUSTOMER_PAST_ORDER' | translate}}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item routerLink="product-filter" routerDirection="forward">
+      <ion-avatar slot="start">
+        <ion-img class="reports"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{'INVENTORY_REPORT' | translate}}</h2>
+        <p>{{'AVAILABILITY_OF_PRODUCTS' | translate}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
